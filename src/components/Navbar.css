@@ -1,0 +1,36 @@
+.navbar {
+  width: 100%;
+  padding: 30px 20px 30px 0;
+  box-sizing: border-box;
+}
+
+.navbar ul {
+  display: flex;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.navbar .logo {
+  font-weight: bold;
+  color: var(--heading-color);
+  display: flex;
+  align-items: center;
+  margin-right: auto;
+}
+
+.navbar .logo span {
+  font-family: Merriweather;
+}
+
+.navbar .logo img {
+  margin-right: 10px;
+  width: 28px;
+  margin-top: -2px;
+}
+
+.navbar a {
+  color: #333;
+  text-decoration: none;
+  margin-right: 20px;
+}

@@ -1,13 +1,106 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap");
+
+:root {
+  --heading-color: #243010;
+  --text-color: #3a3a3a;
+  --primary-color: #6a8d73;
+  --highlight-color: #ed254e;
+  --bg-color: #eaeaea;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+body {
+  font-family: "Source Sans Pro", sans-serif;
+  margin: 0;
+  font-size: 1em;
+  background: var(--bg-color);
+}
+
+ul,
+li,
+p,
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  list-style-type: none;
+}
+
+a {
+  color: var(--text-color);
+  text-decoration: underline;
+}
+
+a:hover {
+  color: var(--highlight-color);
+}
+
+.page-title {
+  font-size: 1.5em;
+  color: var(--heading-color);
+  display: inline-block;
+}
+
+.btn {
+  background: #fff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  color: var(--primary-color);
+  cursor: pointer;
+  font-size: 0.8em;
+  border: 1px solid var(--primary-color);
+}
+
+.btn:hover {
+  color: #fff;
+  background-color: var(--primary-color);
+}
+
+.auth-form {
+  max-width: 360px;
+  margin: 60px auto;
+  padding: 40px;
+  border-radius: 4px;
+  border: 1px solid #f2f2f2;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.05);
+  background: #ffffff;
+}
+
+label {
+  display: block;
+  margin: 24px auto;
+}
+
+label span {
+  display: block;
+  margin-bottom: 6px;
+}
+
+input,
+textarea {
+  padding: 8px 6px;
+  font-size: 1em;
+  color: #777;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+textarea {
+  min-height: 160px;
+}
+
+.error {
+  color: red;
+  background: pink;
+  border: 1px solid red;
+  border-radius: 4px;
+  padding: 8px;
+  margin: 10px 0;
 }

@@ -1,0 +1,41 @@
+.breadcrumbs {
+  width: 100%;
+  padding: 0 20px 30px 0;
+  box-sizing: border-box;
+  color: var(--text-color);
+}
+
+.breadcrumbs ol {
+  list-style-type: none;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.breadcrumbs li {
+  display: flex;
+  align-items: center;
+  font-size: 0.9em;
+}
+
+.breadcrumbs li:not(:last-of-type)::after {
+  content: "\203a";
+  padding: 0 6px;
+}
+
+.breadcrumbs a {
+  color: var(--text-color);
+  text-decoration: underline;
+}
+
+.breadcrumbs a:hover {
+  color: var(--highlight-color);
+}
+
+.breadcrumbs a[aria-current] {
+  text-decoration: none;
+  pointer-events: none;
+}
