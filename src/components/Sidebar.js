@@ -1,4 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 import "./Sidebar.css";
 import ListIcon from "../assets/list_icon.svg";
@@ -7,21 +8,20 @@ import AuthorIcon from "../assets/author_icon.svg";
 import AddIcon from "../assets/add_icon.svg";
 
 export default function Sidebar() {
-  const user = { displayName: "Daniel" };
-  const stats = { books: "2873", catalogues: "22" };
+  const { user } = useAuthContext();
 
   return (
     <div className="sidebar">
       <div className="sidebar-content">
         <div className="user">
           <p>
-            Witaj, <span className="username">{user.displayName}</span>
+            <span className="username">{user.displayName}</span>
           </p>
         </div>
         <nav className="links">
           <ul>
             <li>
-              <NavLink to="/">
+              <NavLink to="catalogues">
                 <img src={ListIcon} alt="list icon" />
                 <span>Katalogi</span>
               </NavLink>
@@ -46,13 +46,21 @@ export default function Sidebar() {
             </li>
           </ul>
         </nav>
-        <div className="stats">
-          <p>
-            Masz <strong>{stats.books}</strong> książki w{" "}
-            <strong>{stats.catalogues}</strong>{" "}
-            {stats.catalogues === "1" ? "katalogu" : "katalogach"}
-          </p>
-        </div>
+        <footer className="footnote">
+          z dedykacją dla Jarka
+          <br />
+          zbudował{" "}
+          <a
+            href="https://github.com/paniszcze"
+            rel="noreferrer"
+            target="_blank"
+          >
+            paniszcze
+          </a>{" "}
+          w 2022
+          <br />
+          &#128150;
+        </footer>
       </div>
     </div>
   );

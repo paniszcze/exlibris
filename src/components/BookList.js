@@ -8,8 +8,8 @@ export default function BookList({ books }) {
       {books.length === 0 && <p>Brak książek do wyświetlenia</p>}
       {books.map((book) => (
         <Link to={`/books/${book.id}`} key={book.id}>
-          <h4>{book.entry.title}</h4>
-          <p>{book.entry.authors}</p>
+          <h4>{book.entryDetails.title}</h4>
+          <p>{book.entryDetails.authors}</p>
         </Link>
       ))}
     </div>

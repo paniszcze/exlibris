@@ -58,8 +58,16 @@
   filter: invert(40%);
 }
 
-.sidebar .stats {
+.sidebar .footnote {
   text-align: center;
   padding: 40px 30px;
   font-size: 0.8em;
+}
+
+.sidebar .footnote a {
+  color: #ffffff;
+}
+
+.sidebar .footnote a:hover {
+  color: var(--heading-color);
 }

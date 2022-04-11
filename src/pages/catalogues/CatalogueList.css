@@ -1,0 +1,31 @@
+.catalogue-list {
+  max-width: 600px;
+}
+
+.catalogue-list h4 {
+  margin: 30px 0 10px;
+  font-weight: normal;
+  color: var(--heading-color);
+}
+
+.catalogue-list li {
+  margin-top: 10px;
+  padding: 16px;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.05);
+  background-color: #fff;
+  border-radius: 6px;
+}
+
+.catalogue-list a {
+  text-decoration: none;
+}
+
+.catalogue-list .btn {
+  margin: 14px 0 0 0;
+}
+
+.catalogue-list p {
+  color: var(--text-color);
+  font-size: 0.9em;
+  font-style: italic;
+}

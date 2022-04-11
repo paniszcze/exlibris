@@ -1,18 +1,19 @@
 import { useState } from "react";
+import { useSignup } from "../../hooks/useSignup";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
+  const { signup, isPending, error } = useSignup();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    console.log();
+    signup(email, password, displayName);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="auth-form">
+    <form onSubmit={handleSubmit} className="user-form">
       <h2>Załóż konto</h2>
       <label>
         <span>E-mail:</span>
@@ -41,7 +42,13 @@ export default function Signup() {
           value={displayName}
         />
       </label>
-      <button className="btn">Załóż konto</button>
+      {!isPending && <button className="btn">Załóż konto</button>}
+      {isPending && (
+        <button className="btn" disabled>
+          Ładuję...
+        </button>
+      )}
+      {error && <div className="error">{error}</div>}
     </form>
   );
 }

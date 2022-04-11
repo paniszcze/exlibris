@@ -1,14 +1,16 @@
-import BookList from "../../components/BookList";
+import { useCollection } from "../../hooks/useCollection";
 
 import "./Catalogues.css";
 
+import CatalogueList from "./CatalogueList";
+
 export default function Catalogues() {
-  const books = null;
+  const { documents: catalogues } = useCollection("catalogues");
 
   return (
-    <div>
+    <div className="catalogues">
       <h2 className="page-title">Moje katalogi</h2>
-      {books && <BookList books={books} />}
+      {catalogues && <CatalogueList catalogues={catalogues} />}
     </div>
   );
 }

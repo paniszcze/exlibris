@@ -1,0 +1,33 @@
+.catalogue {
+  max-width: 600px;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 4px;
+}
+
+.catalogue h2 {
+  font-family: Merriweather;
+  font-style: italic;
+}
+
+.catalogue ol {
+  margin-top: 20px;
+}
+
+.catalogue li {
+  margin-top: 1em;
+  line-height: 1.5em;
+}
+
+.catalogue a {
+  text-decoration: none;
+}
+
+.catalogue .disposed {
+  text-decoration: line-through;
+}
+
+.catalogue + .btn {
+  margin-top: 20px;
+  margin-right: 10px;
+}

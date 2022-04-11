@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function BookDetails({ entry, record }) {
   const handleClick = () => {
-    console.log("edit book");
+    console.log("Edytuj pozycję");
   };
 
   return (
@@ -18,7 +18,7 @@ export default function BookDetails({ entry, record }) {
             </Link>
           ))}
         </p>
-        {entry.translators.length > 0 && (
+        {entry.translators[0] && (
           <>
             <h4>Tłumacz:</h4>
             <p>
@@ -28,7 +28,7 @@ export default function BookDetails({ entry, record }) {
             </p>
           </>
         )}
-        {entry.editors.length > 0 && (
+        {entry.editors[0] && (
           <>
             <h4>Redaktor:</h4>
             <p>
@@ -70,10 +70,14 @@ export default function BookDetails({ entry, record }) {
             <p>{entry.publisher}</p>
           </>
         )}
-        {entry.series.length > 0 && (
+        {entry.series[0] && (
           <>
             <h4>Serie:</h4>
-            <p>{entry.series}</p>
+            <p>
+              {entry.series.map((series, index) => (
+                <span key={index}>{series}</span>
+              ))}
+            </p>
           </>
         )}
         {entry.info && (
@@ -82,7 +86,7 @@ export default function BookDetails({ entry, record }) {
             <p>{entry.info}</p>
           </>
         )}
-        {entry.tags.length > 0 && (
+        {entry.tags[0] && (
           <>
             <h4>Kategorie:</h4>
             <p>

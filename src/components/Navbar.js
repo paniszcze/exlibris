@@ -1,30 +1,47 @@
 import { Link } from "react-router-dom";
+import { useAuthContext } from "../hooks/useAuthContext";
+import { useLogout } from "../hooks/useLogout";
 
 import "./Navbar.css";
 import Logo from "../assets/logo.svg";
 
+import Breadcrumbs from "./Breadcrumbs";
+
 export default function Navbar() {
-  const logout = () => {};
+  const { logout, isPending } = useLogout();
+  const { user } = useAuthContext();
 
   return (
-    <nav className="navbar">
-      <ul>
-        <li className="logo">
-          <img src={Logo} alt="logo" />
-          <span>exLibris</span>
-        </li>
-        <li>
-          <Link to="/login">Zaloguj</Link>
-        </li>
-        <li>
-          <Link to="/signup">Załóż konto</Link>
-        </li>
-        <li>
-          <button className="btn" onClick={logout}>
-            Wyloguj
-          </button>
-        </li>
+    <div className="navbar">
+      <div className="logo">
+        <img src={Logo} alt="exLibris logo" />
+        <span>exLibris</span>
+      </div>
+      {user && <Breadcrumbs />}
+      <ul className="user-nav">
+        {!user ? (
+          <>
+            <li>
+              <Link to="/login">Zaloguj</Link>
+            </li>
+            <li>
+              <Link to="/signup">Załóż konto</Link>
+            </li>
+          </>
+        ) : (
+          <li>
+            {isPending ? (
+              <button className="btn" disabled>
+                Wylogowuję...
+              </button>
+            ) : (
+              <button className="btn" onClick={logout}>
+                Wyloguj
+              </button>
+            )}
+          </li>
+        )}
       </ul>
-    </nav>
+    </div>
   );
 }
