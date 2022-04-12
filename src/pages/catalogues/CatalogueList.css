@@ -8,24 +8,23 @@
   color: var(--heading-color);
 }
 
-.catalogue-list li {
+.catalogue-list h4:first-of-type {
+  margin-top: 0;
+}
+
+.catalogue-list li a {
+  display: block;
   margin-top: 10px;
   padding: 16px;
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.05);
   background-color: #fff;
   border-radius: 6px;
-}
-
-.catalogue-list a {
   text-decoration: none;
 }
 
 .catalogue-list .btn {
+  display: inline-block;
   margin: 14px 0 0 0;
-}
-
-.catalogue-list p {
-  color: var(--text-color);
   font-size: 0.9em;
-  font-style: italic;
+  text-decoration: none;
 }

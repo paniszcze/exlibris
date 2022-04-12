@@ -6,12 +6,21 @@
 }
 
 .catalogue h2 {
+  margin-bottom: 20px;
   font-family: Merriweather;
   font-style: italic;
 }
 
-.catalogue ol {
-  margin-top: 20px;
+.catalogue .archived::after {
+  content: "(zarchiwizowany)";
+  padding-left: 20px;
+  font-weight: normal;
+  color: var(--bg-color);
+  filter: invert(20%);
+}
+
+.catalogue .info {
+  font-style: italic;
 }
 
 .catalogue li {

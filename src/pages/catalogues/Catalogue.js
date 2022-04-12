@@ -18,32 +18,43 @@ export default function Catalogue() {
     console.log("Edytuj katalog");
   };
 
-  const books = [...catalogue.books].sort((a, b) => {
-    if (a.description < b.description) {
-      return -1;
-    }
-    if (a.description > b.description) {
-      return 1;
-    }
-    return 0;
-  });
-
   return (
     <>
       <div className="catalogue">
         {catalogue && (
           <>
-            <h2 className="page-title">{catalogue.title}</h2>
-            <ol start={catalogue.startingIndex}>
-              {books.map((book) => (
-                <li
-                  key={book.bookId}
-                  className={book.isDisposed ? "disposed" : ""}
-                >
-                  <Link to={`/books/${book.bookId}`}>{book.description}</Link>
-                </li>
-              ))}
-            </ol>
+            <h2
+              className={`page-title${catalogue.isActive ? "" : " archived"}`}
+            >
+              {catalogue.title}
+            </h2>
+            {catalogue.books.length > 0 ? (
+              <ol start={catalogue.startingIndex}>
+                {catalogue.books
+                  .filter((book) => Boolean(book))
+                  .sort((a, b) => {
+                    if (a.description < b.description) {
+                      return -1;
+                    }
+                    if (a.description > b.description) {
+                      return 1;
+                    }
+                    return 0;
+                  })
+                  .map((book) => (
+                    <li
+                      key={book.bookId}
+                      className={book.isDisposed ? "disposed" : ""}
+                    >
+                      <Link to={`/books/${book.bookId}`}>
+                        {book.description}
+                      </Link>
+                    </li>
+                  ))}
+              </ol>
+            ) : (
+              <p className="info">Brak pozycji w katalogu</p>
+            )}
           </>
         )}
       </div>

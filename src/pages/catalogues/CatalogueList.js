@@ -1,19 +1,35 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import "./CatalogueList.css";
 
 export default function CatalogueList({ catalogues }) {
-  if (catalogues.length === 0) {
-    return <p>Brak katalogów do wyświetlenia</p>;
-  }
+  const [activeCatalogues, setActiveCatalogues] = useState([]);
+  const [archivedCatalogues, setArchivedCatalogues] = useState([]);
 
-  const activeCatalogues = [];
-  const archivedCatalogues = [];
-  catalogues.map((catalogue) =>
-    catalogue.isActive
-      ? activeCatalogues.push(catalogue)
-      : archivedCatalogues.push(catalogue)
-  );
+  useEffect(() => {
+    catalogues
+      .filter((catalogue) => Boolean(catalogue))
+      .sort((a, b) => {
+        if (a.title < b.title) {
+          return -1;
+        }
+        if (a.title > b.title) {
+          return 1;
+        }
+        return 0;
+      })
+      .map((catalogue) =>
+        catalogue.isActive
+          ? setActiveCatalogues((prevState) => [...prevState, catalogue])
+          : setArchivedCatalogues((prevState) => [...prevState, catalogue])
+      );
+
+    return () => {
+      setActiveCatalogues([]);
+      setArchivedCatalogues([]);
+    };
+  }, [catalogues]);
 
   return (
     <div className="catalogue-list">
@@ -31,9 +47,11 @@ export default function CatalogueList({ catalogues }) {
           </ul>
         </>
       ) : (
-        <p>Brak aktywnych katalogów</p>
+        <p className="info">Brak aktywnych katalogów</p>
       )}
-      <button className="btn">Nowy katalog</button>
+      <Link to="new" className="btn">
+        Nowy katalog
+      </Link>
       <h4>Zarchiwizowane</h4>
       {archivedCatalogues.length > 0 ? (
         <>
@@ -48,7 +66,7 @@ export default function CatalogueList({ catalogues }) {
           </ul>
         </>
       ) : (
-        <p>Brak zarchiwizowanych katalogów</p>
+        <p className="info">Brak zarchiwizowanych katalogów</p>
       )}
     </div>
   );
