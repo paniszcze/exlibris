@@ -1,5 +1,6 @@
 .btn-container {
   display: flex;
+  gap: 6px;
 }
 
 .btn:first-child {
