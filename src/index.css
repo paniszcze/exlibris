@@ -54,13 +54,38 @@ a:hover {
   border-radius: 4px;
   color: var(--primary-color);
   cursor: pointer;
-  font-size: 0.8em;
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 0.9em;
   border: 1px solid var(--primary-color);
 }
 
 .btn:hover {
   color: #fff;
   background-color: var(--primary-color);
+}
+
+a.btn {
+  display: inline-block;
+  margin: 20px 0 0 0;
+  font-size: 0.9em;
+  text-decoration: none;
+}
+
+.btn:disabled {
+  background-color: var(--bg-color);
+  color: #999;
+  border: 1px solid #999;
+  pointer-events: none;
+}
+
+.btn.danger {
+  color: var(--highlight-color);
+  border: 1px solid var(--highlight-color);
+}
+
+.btn.danger:hover {
+  background-color: var(--highlight-color);
+  color: #fff;
 }
 
 .user-form {

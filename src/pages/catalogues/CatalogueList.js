@@ -50,7 +50,7 @@ export default function CatalogueList({ catalogues }) {
         <p className="info">Brak aktywnych katalogów</p>
       )}
       <Link to="new" className="btn">
-        Nowy katalog
+        Stwórz nowy katalog
       </Link>
       <h4>Zarchiwizowane</h4>
       {archivedCatalogues.length > 0 ? (

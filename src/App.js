@@ -10,6 +10,7 @@ import Home from "./pages/home/Home";
 import Catalogues from "./pages/catalogues/Catalogues";
 import Catalogue from "./pages/catalogues/Catalogue";
 import NewCatalogue from "./pages/catalogues/NewCatalogue";
+import EditCatalogue from "./pages/catalogues/EditCatalogue";
 import Books from "./pages/books/Books";
 import Book from "./pages/books/Book";
 import NewBook from "./pages/books/NewBook";
@@ -38,12 +39,16 @@ export default function App() {
                 element={user ? <Catalogues /> : <Navigate to="/login" />}
               />
               <Route
+                path="catalogues/new"
+                element={user ? <NewCatalogue /> : <Navigate to="/login" />}
+              />
+              <Route
                 path="catalogues/:id"
                 element={user ? <Catalogue /> : <Navigate to="/login" />}
               />
               <Route
-                path="catalogues/new"
-                element={user ? <NewCatalogue /> : <Navigate to="/login" />}
+                path="catalogues/:id/edit"
+                element={user ? <EditCatalogue /> : <Navigate to="/login" />}
               />
               <Route
                 path="books"

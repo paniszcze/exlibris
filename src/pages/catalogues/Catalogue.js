@@ -14,10 +14,6 @@ export default function Catalogue() {
     return <div className="loading">Wczytywanie...</div>;
   }
 
-  const handleClick = () => {
-    console.log("Edytuj katalog");
-  };
-
   return (
     <>
       <div className="catalogue">
@@ -58,9 +54,9 @@ export default function Catalogue() {
           </>
         )}
       </div>
-      <button className="btn" onClick={handleClick}>
+      <Link to="edit" className="btn">
         Edytuj katalog
-      </button>
+      </Link>
     </>
   );
 }

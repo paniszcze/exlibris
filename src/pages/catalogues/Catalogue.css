@@ -35,8 +35,3 @@
 .catalogue .disposed {
   text-decoration: line-through;
 }
-
-.catalogue + .btn {
-  margin-top: 20px;
-  margin-right: 10px;
-}

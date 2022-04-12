@@ -20,11 +20,10 @@ export default function NewCatalogue() {
 
   useEffect(() => {
     if (catalogues) {
-      catalogues.map((catalogue) =>
+      catalogues.forEach((catalogue) =>
         setTitles((prevState) => [...prevState, catalogue.title])
       );
     }
-
     return () => setTitles([]);
   }, [catalogues]);
 
@@ -33,7 +32,7 @@ export default function NewCatalogue() {
     setFormError(null);
 
     if (titles.includes(title.trim())) {
-      setFormError(`Masz już katalog o nazwie "${title}"`);
+      setFormError(`Masz już katalog o nazwie "${title.trim()}"`);
       return;
     }
     let parsedNumber = parseInt(startingIndex);
@@ -53,7 +52,7 @@ export default function NewCatalogue() {
       id: user.uid,
     };
 
-    const project = {
+    const catalogue = {
       title: title.trim(),
       createdBy,
       startingIndex: parsedNumber,
@@ -61,7 +60,7 @@ export default function NewCatalogue() {
       books: [],
     };
 
-    await addDocument(project);
+    await addDocument(catalogue);
     if (!response.error) {
       navigate("/catalogues");
     }

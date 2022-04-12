@@ -1,0 +1,7 @@
+.btn-container {
+  display: flex;
+}
+
+.btn:first-child {
+  margin-right: auto;
+}
