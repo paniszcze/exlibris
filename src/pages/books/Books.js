@@ -1,6 +1,6 @@
 import { useCollection } from "../../hooks/useCollection";
 
-import BookList from "../../components/BookList";
+import BookList from "./BookList";
 
 export default function Books() {
   const { documents: books } = useCollection("books");
