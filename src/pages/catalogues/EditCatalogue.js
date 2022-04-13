@@ -89,7 +89,7 @@ export default function Catalogue() {
   };
 
   // display data fetching status
-  if (error) {
+  if (error && !response.isPending) {
     return <div className="error">{error}</div>;
   }
   if (!catalogue) {
