@@ -1,0 +1,49 @@
+.book-details {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 4px;
+}
+
+.book-details h2,
+.book-details h3 {
+  font-family: Merriweather;
+  font-style: italic;
+}
+
+.book-details h3 {
+  font-weight: normal;
+  margin: 10px 0 30px;
+}
+
+.book-details h4 {
+  color: var(--text-color);
+  font-size: 0.9em;
+  margin-top: 20px;
+}
+
+.book-details > p > span::after {
+  content: ", ";
+}
+
+.book-details > p > span:last-child::after {
+  content: "";
+}
+
+.book-details em {
+  display: inline-block;
+  margin: 10px 6px 0 0;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  font-style: normal;
+  color: #fff;
+  background-color: var(--primary-color);
+}
+
+.book-details em:last-child {
+  margin-right: 0;
+}
+
+.book-details + .btn {
+  margin-top: 20px;
+}

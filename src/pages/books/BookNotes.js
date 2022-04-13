@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import "./BookNotes.css";
 import TrashIcon from "../../assets/delete_icon.svg";
 
 import { useFirestore } from "../../hooks/useFirestore";

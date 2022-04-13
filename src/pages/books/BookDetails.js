@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 
+import "./BookDetails.css";
+
 export default function BookDetails({ entry, record }) {
   const handleClick = () => {
     console.log("Edytuj pozycję");
@@ -13,8 +15,8 @@ export default function BookDetails({ entry, record }) {
         <h4>Autor:</h4>
         <p>
           {entry.authors.map((author, index) => (
-            <Link to="/authors/0" key={index}>
-              {author}
+            <Link to={`/authors/${author.id}`} key={index}>
+              {author.name}
             </Link>
           ))}
         </p>

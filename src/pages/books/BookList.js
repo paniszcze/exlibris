@@ -9,7 +9,7 @@ export default function BookList({ books }) {
       {books.map((book) => (
         <Link to={`/books/${book.id}`} key={book.id}>
           <h4>{book.entryDetails.title}</h4>
-          <p>{book.entryDetails.authors}</p>
+          <p>{book.entryDetails.authors.map((author) => author.name)}</p>
         </Link>
       ))}
     </div>
