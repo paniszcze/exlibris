@@ -4,7 +4,6 @@ import { db } from "../firebase/config";
 import {
   collection,
   doc,
-  Timestamp,
   addDoc,
   deleteDoc,
   updateDoc,
@@ -61,19 +60,16 @@ export const useFirestore = (c) => {
   };
 
   // add a document
-  const addDocument = async (doc) => {
+  const addDocument = async (document) => {
     dispatch({ type: "IS_PENDING" });
 
     try {
-      const createdAt = Timestamp.fromDate(new Date());
-      const addedDocument = await addDoc(collection(db, c), {
-        ...doc,
-        createdAt,
-      });
+      const addedDocument = await addDoc(collection(db, c), { ...document });
       dispatchIfNotCancelled({
         type: "ADDED_DOCUMENT",
         payload: addedDocument,
       });
+      return addedDocument;
     } catch (err) {
       dispatchIfNotCancelled({ type: "ERROR", payload: err.message });
     }
