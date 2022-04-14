@@ -136,12 +136,22 @@ textarea {
 }
 
 .error {
-  color: var(--highlight-color);
+  margin: 10px 0;
+  padding: 8px;
   background: var(--error-bg-color);
   border: 1px solid var(--highlight-color);
   border-radius: 4px;
-  padding: 8px;
-  margin: 10px 0;
+  line-height: 1.6em;
+  text-align: justify;
+  color: var(--highlight-color);
+}
+
+.error a {
+  color: var(--highlight-color);
+}
+
+.error a:hover {
+  text-decoration: none;
 }
 
 .info,
