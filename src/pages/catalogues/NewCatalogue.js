@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useCollection } from "../../hooks/useCollection";
-
 import { useFirestore } from "../../hooks/useFirestore";
 
 import "./NewCatalogue.css";
@@ -60,9 +59,13 @@ export default function NewCatalogue() {
       books: [],
     };
 
-    await addDocument(catalogue);
-    if (!response.error) {
-      navigate("/catalogues");
+    try {
+      await addDocument(catalogue);
+      if (!response.error) {
+        navigate("/catalogues");
+      }
+    } catch (error) {
+      console.log(error.message);
     }
   };
 
