@@ -1,20 +1,28 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useAuthContext } from "../../hooks/useAuthContext";
 import { useDocument } from "../../hooks/useDocument";
-import { useCollection } from "../../hooks/useCollection";
-
 import { useFirestore } from "../../hooks/useFirestore";
 
 import "./Catalogue.css";
 import "./EditCatalogue.css";
 
-export default function Catalogue() {
+export default function EditCatalogue() {
   const navigate = useNavigate();
+  const { user } = useAuthContext();
   const { id } = useParams();
-  const { document: catalogue, error } = useDocument("catalogues", id);
-  const { documents: catalogues } = useCollection("catalogues");
-  const { updateDocument, deleteDocument, response } =
-    useFirestore("catalogues");
+
+  const { document: catalogue, error: catalogueError } = useDocument(
+    "catalogues",
+    id
+  );
+  const { document: userData } = useDocument("users", user.uid);
+  const {
+    updateDocument: updateCatalogue,
+    deleteDocument,
+    response,
+  } = useFirestore("catalogues");
+  const { updateDocument: updateUserData } = useFirestore("users");
 
   // populate input with current catalogue's props
   const [title, setTitle] = useState("");
@@ -29,25 +37,24 @@ export default function Catalogue() {
   }, [catalogue]);
 
   // store restricted catalogue names
-  const [titles, setTitles] = useState([]);
+  const [catalogues, setCatalogues] = useState([]);
+  const [restrictedTitles, setRestrictedTitles] = useState([]);
 
   useEffect(() => {
-    if (catalogues) {
-      catalogues.forEach((item) => {
-        if (item.title !== catalogue.title) {
-          setTitles((prevState) => [...prevState, item.title]);
-        }
-      });
+    if (userData) {
+      setCatalogues([...userData.catalogues]);
+      setRestrictedTitles(
+        userData.catalogues.map((catalogue) => catalogue.title)
+      );
     }
-    return () => setTitles([]);
-  }, [catalogues, catalogue]);
+  }, [userData]);
 
   // button handlers
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormError(null);
 
-    if (titles.includes(title.trim())) {
+    if (restrictedTitles.includes(title.trim()) && title !== catalogue.title) {
       setFormError(`Masz już inny katalog o nazwie "${title.trim()}"`);
       return;
     }
@@ -63,19 +70,29 @@ export default function Catalogue() {
       return;
     }
 
-    const updates = {
+    await updateCatalogue(id, {
       title: title.trim(),
       startingIndex: parsedNumber,
-    };
+    });
+    await updateUserData(user.uid, {
+      catalogues: catalogues.map((item) =>
+        item.id === id ? { ...item, title: title.trim() } : item
+      ),
+    });
 
-    await updateDocument(id, updates);
     if (!response.error) {
       navigate(`/catalogues/${id}`);
     }
   };
 
   const toggleIsActive = async (id) => {
-    await updateDocument(id, { isActive: !catalogue.isActive });
+    const toggledValue = !catalogue.isActive;
+    await updateCatalogue(id, { isActive: toggledValue });
+    await updateUserData(user.uid, {
+      catalogues: catalogues.map((item) =>
+        item.id === id ? { ...item, isActive: toggledValue } : item
+      ),
+    });
     if (!response.error) {
       navigate(`/catalogues/${id}`);
     }
@@ -83,14 +100,17 @@ export default function Catalogue() {
 
   const handleDelete = async (id) => {
     await deleteDocument(id);
+    await updateUserData(user.uid, {
+      catalogues: catalogues.filter((item) => item.id !== id),
+    });
     if (!response.error) {
       navigate("/catalogues");
     }
   };
 
   // display data fetching status
-  if (error && !response.isPending) {
-    return <div className="error">{error}</div>;
+  if (catalogueError) {
+    return <div className="error">{catalogueError}</div>;
   }
   if (!catalogue) {
     return <div className="loading">Wczytywanie...</div>;

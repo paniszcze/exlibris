@@ -1,36 +1,42 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import { useCollection } from "../../hooks/useCollection";
+import { useDocument } from "../../hooks/useDocument";
 import { useFirestore } from "../../hooks/useFirestore";
 
 import "./NewCatalogue.css";
 
 export default function NewCatalogue() {
-  const navigate = useNavigate();
   const { user } = useAuthContext();
-  const { documents: catalogues } = useCollection("catalogues");
-  const { addDocument, response } = useFirestore("catalogues");
-  const [titles, setTitles] = useState([]);
+  const navigate = useNavigate();
+
+  const { document: userData } = useDocument("users", user.uid);
+  const { addDocument: addCatalogue, response: catalogueResponse } =
+    useFirestore("catalogues");
+  const { updateDocument: updateUser } = useFirestore("users");
 
   const [title, setTitle] = useState("");
   const [startingIndex, setStartingIndex] = useState(1);
   const [formError, setFormError] = useState(null);
 
+  const [catalogues, setCatalogues] = useState([]);
+  const [restrictedTitles, setRestrictedTitles] = useState([]);
+
   useEffect(() => {
-    if (catalogues) {
-      catalogues.forEach((catalogue) =>
-        setTitles((prevState) => [...prevState, catalogue.title])
+    if (userData) {
+      setCatalogues([...userData.catalogues]);
+      setRestrictedTitles(
+        userData.catalogues.map((catalogue) => catalogue.title)
       );
+      setStartingIndex(userData.bookCount + 1);
     }
-    return () => setTitles([]);
-  }, [catalogues]);
+  }, [userData]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormError(null);
 
-    if (titles.includes(title.trim())) {
+    if (restrictedTitles.includes(title.trim())) {
       setFormError(`Masz już katalog o nazwie "${title.trim()}"`);
       return;
     }
@@ -46,22 +52,31 @@ export default function NewCatalogue() {
       return;
     }
 
-    const createdBy = {
-      displayName: user.displayName,
-      id: user.uid,
-    };
-
     const catalogue = {
-      title: title.trim(),
-      createdBy,
-      startingIndex: parsedNumber,
       isActive: true,
+      title: title.trim(),
+      startingIndex: parsedNumber,
       books: [],
+      createdBy: user.uid,
     };
 
     try {
-      await addDocument(catalogue);
-      if (!response.error) {
+      const docRef = await addCatalogue(catalogue);
+
+      if (docRef) {
+        await updateUser(user.uid, {
+          catalogues: [
+            ...catalogues,
+            {
+              id: docRef.id,
+              title: title.trim(),
+              isActive: true,
+            },
+          ],
+        });
+      }
+
+      if (!catalogueResponse.error) {
         navigate("/catalogues");
       }
     } catch (error) {
