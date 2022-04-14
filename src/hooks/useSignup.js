@@ -25,7 +25,8 @@ export const useSignup = () => {
       // update user profile
       await updateProfile(res.user, { displayName });
       await setDoc(doc(db, "users", res.user.uid), {
-        displayName,
+        bookCount: 0,
+        catalogues: [],
       });
 
       // dispatch login action
