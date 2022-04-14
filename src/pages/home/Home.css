@@ -2,6 +2,10 @@
   max-width: 600px;
 }
 
+.home .page-title {
+  margin-bottom: 20px;
+}
+
 .activity {
   margin: 40px 0;
 }
