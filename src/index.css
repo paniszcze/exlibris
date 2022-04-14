@@ -118,6 +118,16 @@ textarea {
   box-sizing: border-box;
   border: 1px solid #ddd;
   border-radius: 4px;
+  outline: 0;
+}
+
+label > input:focus {
+  border: 1px solid var(--primary-color);
+  box-shadow: 0 0 0 1px var(--primary-color);
+}
+
+input:required::after {
+  content: "*";
 }
 
 textarea {
