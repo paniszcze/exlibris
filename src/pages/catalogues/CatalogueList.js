@@ -19,7 +19,7 @@ export default function CatalogueList({ catalogues }) {
         }
         return 0;
       })
-      .map((catalogue) =>
+      .forEach((catalogue) =>
         catalogue.isActive
           ? setActiveCatalogues((prevState) => [...prevState, catalogue])
           : setArchivedCatalogues((prevState) => [...prevState, catalogue])
@@ -35,17 +35,13 @@ export default function CatalogueList({ catalogues }) {
     <div className="catalogue-list">
       <h4>Aktywne katalogi</h4>
       {activeCatalogues.length > 0 ? (
-        <>
-          <ul>
-            {activeCatalogues.map((catalogue) => (
-              <li key={catalogue.id}>
-                <Link to={`/catalogues/${catalogue.id}`}>
-                  {catalogue.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </>
+        <ul>
+          {activeCatalogues.map((catalogue) => (
+            <li key={catalogue.id}>
+              <Link to={`/catalogues/${catalogue.id}`}>{catalogue.title}</Link>
+            </li>
+          ))}
+        </ul>
       ) : (
         <p className="info">Brak aktywnych katalogów</p>
       )}
@@ -54,17 +50,13 @@ export default function CatalogueList({ catalogues }) {
       </Link>
       <h4>Zarchiwizowane</h4>
       {archivedCatalogues.length > 0 ? (
-        <>
-          <ul>
-            {archivedCatalogues.map((catalogue) => (
-              <li key={catalogue.id}>
-                <Link to={`/catalogues/${catalogue.id}`}>
-                  {catalogue.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </>
+        <ul>
+          {archivedCatalogues.map((catalogue) => (
+            <li key={catalogue.id}>
+              <Link to={`/catalogues/${catalogue.id}`}>{catalogue.title}</Link>
+            </li>
+          ))}
+        </ul>
       ) : (
         <p className="info">Brak zarchiwizowanych katalogów</p>
       )}
