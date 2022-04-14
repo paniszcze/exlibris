@@ -8,15 +8,12 @@ const replacementColors = {
 };
 
 export const customStyles = {
-  placeholder: (provided) => {
-    const fontStyle = "italic";
-    const opacity = 0.5;
-    return { ...provided, fontStyle, opacity };
-  },
-  multiValue: (provided) => {
-    const borderRadius = "3px";
-    return { ...provided, borderRadius };
-  },
+  placeholder: (provided) => ({
+    ...provided,
+    fontStyle: "italic",
+    opacity: 0.5,
+  }),
+  multiValue: (provided) => ({ ...provided, borderRadius: "3px" }),
 };
 
 export const customTheme = (theme) => ({
