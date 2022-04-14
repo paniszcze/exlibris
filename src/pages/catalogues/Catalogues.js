@@ -1,23 +1,25 @@
-import { useCollection } from "../../hooks/useCollection";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { useDocument } from "../../hooks/useDocument";
 
 import "./Catalogues.css";
 
 import CatalogueList from "./CatalogueList";
 
 export default function Catalogues() {
-  const { documents: catalogues, error } = useCollection("catalogues");
+  const { user } = useAuthContext();
+  const { document: userData, error } = useDocument("users", user.uid);
 
   if (error) {
     return <div className="error">{error}</div>;
   }
-  if (!catalogues) {
+  if (!userData) {
     return <div className="loading">Wczytywanie...</div>;
   }
 
   return (
     <div className="catalogues">
       <h2 className="page-title">Moje katalogi</h2>
-      {catalogues && <CatalogueList catalogues={catalogues} />}
+      {userData && <CatalogueList catalogues={userData.catalogues} />}
     </div>
   );
 }
