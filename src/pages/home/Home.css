@@ -1,0 +1,21 @@
+.home {
+  max-width: 600px;
+}
+
+.activity {
+  margin: 40px 0;
+}
+
+.activity h3 {
+  margin-bottom: 20px;
+}
+
+.activity li a {
+  display: block;
+  margin-top: 10px;
+  padding: 16px;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.05);
+  background-color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+}
