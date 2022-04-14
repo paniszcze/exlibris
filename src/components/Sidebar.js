@@ -51,7 +51,7 @@ export default function Sidebar() {
           <br />
           zbudował{" "}
           <a
-            href="https://github.com/paniszcze"
+            href="https://github.com/paniszcze/exlibris"
             rel="noreferrer"
             target="_blank"
           >
