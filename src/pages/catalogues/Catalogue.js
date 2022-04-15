@@ -25,19 +25,17 @@ export default function Catalogue() {
             {catalogue.books
               .filter(Boolean)
               .sort((a, b) => {
-                if (a.description < b.description) {
+                let key = catalogue.sortBooksBy;
+                if (a[key] < b[key]) {
                   return -1;
                 }
-                if (a.description > b.description) {
+                if (a[key] > b[key]) {
                   return 1;
                 }
                 return 0;
               })
               .map((book) => (
-                <li
-                  key={book.id}
-                  className={book.isDisposed ? "disposed" : ""}
-                >
+                <li key={book.id} className={book.isDisposed ? "disposed" : ""}>
                   <Link to={`/books/${book.id}`}>{book.description}</Link>
                 </li>
               ))}

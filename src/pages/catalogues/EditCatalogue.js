@@ -7,6 +7,9 @@ import { useFirestore } from "../../hooks/useFirestore";
 import "./Catalogue.css";
 import "./EditCatalogue.css";
 
+import Select from "react-select";
+import { customStyles, customTheme } from "../../utils/selectStyles";
+
 export default function EditCatalogue() {
   const navigate = useNavigate();
   const { user } = useAuthContext();
@@ -24,15 +27,23 @@ export default function EditCatalogue() {
   } = useFirestore("catalogues");
   const { updateDocument: updateUserData } = useFirestore("users");
 
+  // react select options
+  const sortingOptions = [
+    { value: "description", label: "nazwisku autora" },
+    { value: "title", label: "tytule książki" },
+  ];
+
   // populate input with current catalogue's props
   const [title, setTitle] = useState("");
   const [startingIndex, setStartingIndex] = useState(1);
+  const [sortBooksBy, setSortBooksBy] = useState("");
   const [formError, setFormError] = useState(null);
 
   useEffect(() => {
     if (catalogue) {
       setTitle(catalogue.title);
       setStartingIndex(catalogue.startingIndex);
+      setSortBooksBy(catalogue.sortBooksBy);
     }
   }, [catalogue]);
 
@@ -73,6 +84,7 @@ export default function EditCatalogue() {
     await updateCatalogue(id, {
       title: title.trim(),
       startingIndex: parsedNumber,
+      sortBooksBy,
     });
     await updateUserData(user.uid, {
       catalogues: catalogues.map((item) =>
@@ -138,6 +150,24 @@ export default function EditCatalogue() {
             onChange={(e) => setStartingIndex(e.target.value)}
             value={startingIndex}
             disabled={!catalogue.isActive}
+          />
+        </label>
+        <label>
+          <span>Sortuj pozycje w katalogu po:</span>
+          <Select
+            onChange={(option) => setSortBooksBy(option.value)}
+            options={sortingOptions}
+            defaultValue={{
+              value: catalogue.sortBooksBy,
+              label:
+                catalogue.sortBooksBy === "description"
+                  ? "nazwisku autora"
+                  : "tytule książki",
+            }}
+            isClearable={false}
+            isDisabled={!catalogue.isActive}
+            styles={customStyles}
+            theme={customTheme}
           />
         </label>
         {formError && <p className="error">{formError}</p>}

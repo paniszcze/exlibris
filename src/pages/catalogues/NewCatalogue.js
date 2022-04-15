@@ -6,6 +6,9 @@ import { useFirestore } from "../../hooks/useFirestore";
 
 import "./NewCatalogue.css";
 
+import Select from "react-select";
+import { customStyles, customTheme } from "../../utils/selectStyles";
+
 export default function NewCatalogue() {
   const { user } = useAuthContext();
   const navigate = useNavigate();
@@ -17,6 +20,7 @@ export default function NewCatalogue() {
 
   const [title, setTitle] = useState("");
   const [startingIndex, setStartingIndex] = useState(1);
+  const [sortBooksBy, setSortBooksBy] = useState("description");
   const [formError, setFormError] = useState(null);
 
   const [catalogues, setCatalogues] = useState([]);
@@ -31,6 +35,11 @@ export default function NewCatalogue() {
       setStartingIndex(userData.bookCount + 1);
     }
   }, [userData]);
+
+  const sortingOptions = [
+    { value: "description", label: "nazwisku autora" },
+    { value: "title", label: "tytule książki" },
+  ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,6 +65,7 @@ export default function NewCatalogue() {
       isActive: true,
       title: title.trim(),
       startingIndex: parsedNumber,
+      sortBooksBy,
       books: [],
       createdBy: user.uid,
     };
@@ -104,6 +114,17 @@ export default function NewCatalogue() {
             type="number"
             onChange={(e) => setStartingIndex(e.target.value)}
             value={startingIndex}
+          />
+        </label>
+        <label>
+          <span>Sortuj pozycje w katalogu po:</span>
+          <Select
+            onChange={(option) => setSortBooksBy(option.value)}
+            options={sortingOptions}
+            defaultValue={sortingOptions[0]}
+            isClearable={false}
+            styles={customStyles}
+            theme={customTheme}
           />
         </label>
         {formError && <p className="error">{formError}</p>}
