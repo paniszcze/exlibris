@@ -8,6 +8,10 @@ const replacementColors = {
 };
 
 export const customStyles = {
+  control: (provided, state) => ({
+    ...provided,
+    backgroundColor: state.isDisabled ? "#fefefe" : "#fff",
+  }),
   placeholder: (provided) => ({
     ...provided,
     fontStyle: "italic",
