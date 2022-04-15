@@ -1,10 +1,10 @@
 const replacementColors = {
-  primary: "#6a8d73",
-  primary75: "#8ba792",
-  primary50: "#aec2b3",
-  primary25: "#d0dcd3",
-  danger: "#ff5666",
-  dangerLight: "#ffc2c8",
+  primary: "#18206f",
+  primary75: "#2837b8",
+  primary50: "#5865da",
+  primary25: "#9ba2e9",
+  danger: "#d88373",
+  dangerLight: "#f2D5cf",
 };
 
 export const customStyles = {

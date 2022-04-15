@@ -49,13 +49,13 @@
 }
 
 .sidebar .links a.active {
-  color: #555;
+  color: var(--heading-color);
   background: var(--bg-color);
   border-radius: 6px 0 0 6px;
 }
 
 .sidebar .links .active img {
-  filter: invert(40%);
+  filter: invert(30%);
 }
 
 .sidebar .footnote {
@@ -69,5 +69,5 @@
 }
 
 .sidebar .footnote a:hover {
-  color: var(--heading-color);
+  color: var(--highlight-color);
 }

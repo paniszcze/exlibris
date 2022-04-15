@@ -10,7 +10,7 @@
 .navbar .logo {
   margin-right: 30px;
   padding-right: 30px;
-  border-right: 1px solid rgba(106, 141, 115, 0.4);
+  border-right: 1px solid rgba(23, 37, 90, 0.4);
   font-weight: bold;
   color: var(--heading-color);
   display: flex;
