@@ -17,41 +17,33 @@ export default function Catalogue() {
   return (
     <>
       <div className="catalogue">
-        {catalogue && (
-          <>
-            <h2
-              className={`page-title${catalogue.isActive ? "" : " archived"}`}
-            >
-              {catalogue.title}
-            </h2>
-            {catalogue.books.length > 0 ? (
-              <ol start={catalogue.startingIndex}>
-                {catalogue.books
-                  .filter((book) => Boolean(book))
-                  .sort((a, b) => {
-                    if (a.description < b.description) {
-                      return -1;
-                    }
-                    if (a.description > b.description) {
-                      return 1;
-                    }
-                    return 0;
-                  })
-                  .map((book) => (
-                    <li
-                      key={book.bookId}
-                      className={book.isDisposed ? "disposed" : ""}
-                    >
-                      <Link to={`/books/${book.bookId}`}>
-                        {book.description}
-                      </Link>
-                    </li>
-                  ))}
-              </ol>
-            ) : (
-              <p className="info">Brak pozycji w katalogu</p>
-            )}
-          </>
+        <h2 className={`page-title${catalogue.isActive ? "" : " archived"}`}>
+          {catalogue.title}
+        </h2>
+        {catalogue.books.length > 0 ? (
+          <ol start={catalogue.startingIndex}>
+            {catalogue.books
+              .filter(Boolean)
+              .sort((a, b) => {
+                if (a.description < b.description) {
+                  return -1;
+                }
+                if (a.description > b.description) {
+                  return 1;
+                }
+                return 0;
+              })
+              .map((book) => (
+                <li
+                  key={book.id}
+                  className={book.isDisposed ? "disposed" : ""}
+                >
+                  <Link to={`/books/${book.id}`}>{book.description}</Link>
+                </li>
+              ))}
+          </ol>
+        ) : (
+          <p className="info">Brak pozycji w katalogu</p>
         )}
       </div>
       <Link to="edit" className="btn">

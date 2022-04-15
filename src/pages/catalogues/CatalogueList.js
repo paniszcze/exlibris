@@ -9,7 +9,7 @@ export default function CatalogueList({ catalogues }) {
 
   useEffect(() => {
     catalogues
-      .filter((catalogue) => Boolean(catalogue))
+      .filter(Boolean)
       .sort((a, b) => {
         if (a.title < b.title) {
           return -1;
