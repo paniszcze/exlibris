@@ -3,24 +3,30 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useDocument } from "../../hooks/useDocument";
 import { useFirestore } from "../../hooks/useFirestore";
-
-import { db } from "../../firebase/config";
-import { doc, updateDoc } from "firebase/firestore";
+import { arrayUnion, increment } from "firebase/firestore";
 
 import Select from "react-select";
 import CreatableInputOnly from "../../components/CreatableInputOnly";
-import { customStyles, customTheme } from "../../utils/selectStyles";
+import {
+  createOption,
+  customStyles,
+  customTheme,
+  emptyMultiInput,
+  listSelectedValues,
+} from "../../utils/select";
+
+import { createDescription } from "../../utils/description";
 
 import "./NewBook.css";
 
-const listSelectedValues = (selectState) =>
-  [...selectState.value].map((item) => item.value);
-
 export default function NewBook() {
-  const { user } = useAuthContext();
-  const { document: userData } = useDocument("users", user.uid);
-  const { updateDocument, response } = useFirestore("catalogues");
   const navigate = useNavigate();
+  const { user } = useAuthContext();
+
+  const { document: userData } = useDocument("users", user.uid);
+  const { addDocument: addBook } = useFirestore("books");
+  const { updateDocument: updateCatalogue } = useFirestore("catalogues");
+  const { updateDocument: updateUser } = useFirestore("users");
 
   const [activeCatalogues, setActiveCatalogues] = useState([]);
   const [formError, setFormError] = useState(null);
@@ -28,19 +34,18 @@ export default function NewBook() {
   const [catalogue, setCatalogue] = useState(null);
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
-  const [year, setYear] = useState("");
-  const [place, setPlace] = useState("");
+  const [volume, setVolume] = useState("");
+  const [authors, setAuthors] = useState({ ...emptyMultiInput });
+  const [translators, setTranslators] = useState({ ...emptyMultiInput });
+  const [editors, setEditors] = useState({ ...emptyMultiInput });
   const [edition, setEdition] = useState("");
+  const [place, setPlace] = useState("");
+  const [year, setYear] = useState("");
   const [publisher, setPublisher] = useState("");
-  const [series, setSeries] = useState({
-    inputValue: "",
-    value: [],
-  });
-  const [categories, setCategories] = useState({
-    inputValue: "",
-    value: [],
-  });
+  const [series, setSeries] = useState({ ...emptyMultiInput });
+  const [printRun, setPrintRun] = useState("");
   const [info, setInfo] = useState("");
+  const [categories, setCategories] = useState({ ...emptyMultiInput });
 
   // create values for react-select
   useEffect(() => {
@@ -48,9 +53,7 @@ export default function NewBook() {
       setActiveCatalogues(
         userData.catalogues
           .filter((catalogue) => Boolean(catalogue.isActive))
-          .map((catalogue) => {
-            return { value: catalogue.id, label: catalogue.title };
-          })
+          .map((catalogue) => createOption(catalogue.title, catalogue.id))
       );
     }
   }, [userData]);
@@ -66,44 +69,61 @@ export default function NewBook() {
       return;
     }
 
+    const entryDetails = {
+      title: title.trim(),
+      subtitle: subtitle.trim(),
+      volume: volume.trim(),
+      authors: listSelectedValues(authors),
+      translators: listSelectedValues(translators),
+      editors: listSelectedValues(editors),
+      edition: edition.trim(),
+      place: place.trim(),
+      year: year.trim(),
+      publisher: publisher.trim(),
+      series: listSelectedValues(series),
+      printRun: printRun.trim(),
+      info: info.trim(),
+      tags: listSelectedValues(categories),
+    };
+
     const book = {
       catalogue: {
+        id: catalogue.value,
+        title: catalogue.label,
         isDisposed: false,
         record: "",
-        description: "",
+        description: createDescription(entryDetails),
       },
-      entryDetails: {
-        title: title.trim(),
-        subtitle: subtitle.trim(),
-        authors: [],
-        translators: [],
-        editors: [],
-        year: year.trim(),
-        place: place.trim(),
-        edition: edition.trim(),
-        publisher: publisher.trim(),
-        series: listSelectedValues(series),
-        tags: listSelectedValues(categories),
-        info: info.trim(),
-      },
+      entryDetails,
       notes: [],
       createdBy: user.uid,
     };
 
-    const updates = { books: [book] };
-
-    console.log(book);
-
     try {
-      await updateDoc(doc(db, "catalogues", catalogue.value), updates);
+      // create new document
+      const docRef = await addBook(book);
+      // proceed if the document has been successfully created
+      if (docRef) {
+        // update catalogue entries by adding new book's summary and ref
+        const catalogueUpdate = {
+          books: arrayUnion({
+            title: book.entryDetails.title,
+            description: book.catalogue.description,
+            isDisposed: false,
+            id: docRef.id,
+          }),
+        };
+        await updateCatalogue(catalogue.value, catalogueUpdate);
+        // update book count in user data
+        await updateUser(user.uid, { bookCount: increment(1) });
+      }
+      // navigate to new book's detail page
+      if (docRef) {
+        navigate(`/books/${docRef.id}`);
+      }
     } catch (error) {
       console.log(error.message);
     }
-
-    // await updateDocument(catalogue.id, updates)
-    // if (!response.error) {
-    //   navigate('/')
-    // }
   };
 
   if (userData && activeCatalogues.length === 0) {
@@ -153,6 +173,29 @@ export default function NewBook() {
               />
             </label>
             <label>
+              <span>Tom:</span>
+              <input
+                type="text"
+                onChange={(e) => setVolume(e.target.value)}
+                value={volume}
+              />
+            </label>
+            <label>
+              <span>Autor:</span>
+              <CreatableInputOnly state={authors} setState={setAuthors} />
+            </label>
+            <label>
+              <span>Tłumacz:</span>
+              <CreatableInputOnly
+                state={translators}
+                setState={setTranslators}
+              />
+            </label>
+            <label>
+              <span>Redaktor:</span>
+              <CreatableInputOnly state={editors} setState={setEditors} />
+            </label>
+            <label>
               <span>Wydanie:</span>
               <input
                 type="text"
@@ -187,6 +230,14 @@ export default function NewBook() {
             <label>
               <span>Seria wydawnicza:</span>
               <CreatableInputOnly state={series} setState={setSeries} />
+            </label>
+            <label>
+              <span>Nakład:</span>
+              <input
+                type="text"
+                onChange={(e) => setPrintRun(e.target.value)}
+                value={printRun}
+              />
             </label>
             <label>
               <span>Kategoria:</span>

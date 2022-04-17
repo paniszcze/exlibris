@@ -1,0 +1,8 @@
+.book-form .btn-container {
+  display: flex;
+  gap: 6px;
+}
+
+.book-form .btn:first-child {
+  margin-right: auto;
+}

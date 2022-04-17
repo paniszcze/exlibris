@@ -2,25 +2,28 @@ import { Link } from "react-router-dom";
 
 import "./BookDetails.css";
 
-export default function BookDetails({ entry, record }) {
-  const handleClick = () => {
-    console.log("Edytuj pozycję");
-  };
-
+export default function BookDetails({ entry, record, isDisposed }) {
   return (
     <div>
       <div className="book-details">
-        <h2 className="page-title">{entry.title}</h2>
+        <h2 className={`page-title${isDisposed ? " disposed" : ""}`}>
+          {entry.title}
+        </h2>
         {entry.subtitle && <h3>{entry.subtitle}</h3>}
-        <h4>Autor:</h4>
-        <p>
-          {entry.authors.map((author, index) => (
-            <Link to={`/authors/${author.id}`} key={index}>
-              {author.name}
-            </Link>
-          ))}
-        </p>
-        {entry.translators[0] && (
+        {entry.volume && <h3>t. {entry.volume}</h3>}
+        {entry.authors.length > 0 && (
+          <>
+            <h4>Autor:</h4>
+            <p>
+              {entry.authors.map((author, index) => (
+                <Link to="#" key={index}>
+                  {author}
+                </Link>
+              ))}
+            </p>
+          </>
+        )}
+        {entry.translators.length > 0 && (
           <>
             <h4>Tłumacz:</h4>
             <p>
@@ -30,7 +33,7 @@ export default function BookDetails({ entry, record }) {
             </p>
           </>
         )}
-        {entry.editors[0] && (
+        {entry.editors.length > 0 && (
           <>
             <h4>Redaktor:</h4>
             <p>
@@ -72,12 +75,28 @@ export default function BookDetails({ entry, record }) {
             <p>{entry.publisher}</p>
           </>
         )}
-        {entry.series[0] && (
+        {entry.printRun && (
+          <>
+            <h4>Nakład:</h4>
+            <p>{entry.printRun}</p>
+          </>
+        )}
+        {entry.series.length > 0 && (
           <>
             <h4>Serie:</h4>
             <p>
               {entry.series.map((series, index) => (
                 <span key={index}>{series}</span>
+              ))}
+            </p>
+          </>
+        )}
+        {entry.tags.length > 0 && (
+          <>
+            <h4>Kategorie:</h4>
+            <p>
+              {entry.tags.map((tag, index) => (
+                <em key={index}>{tag}</em>
               ))}
             </p>
           </>
@@ -88,16 +107,6 @@ export default function BookDetails({ entry, record }) {
             <p>{entry.info}</p>
           </>
         )}
-        {entry.tags[0] && (
-          <>
-            <h4>Kategorie:</h4>
-            <p>
-              {entry.tags.map((tag, index) => (
-                <em key={index}>{tag}</em>
-              ))}
-            </p>
-          </>
-        )}
         {record && (
           <>
             <h4>Numer katalogowy:</h4>
@@ -105,9 +114,9 @@ export default function BookDetails({ entry, record }) {
           </>
         )}
       </div>
-      <button className="btn" onClick={handleClick}>
+      <Link to="edit" className="btn">
         Edytuj pozycję
-      </button>
+      </Link>
     </div>
   );
 }
