@@ -1,3 +1,30 @@
+// REACT SELECT UTILS
+
+// structures
+export const emptyMultiInput = {
+  inputValue: "",
+  value: [],
+};
+
+// helper functions
+export const createOption = (label, value = label) => {
+  return {
+    label,
+    value,
+  };
+};
+
+export const createMultiInput = (labelList) => {
+  return {
+    inputValue: "",
+    value: labelList.map((label) => createOption(label)),
+  };
+};
+
+export const listSelectedValues = (selectState) =>
+  [...selectState.value].map((item) => item.value);
+
+// custom theme adjustments
 const replacementColors = {
   primary: "#18206f",
   primary75: "#2837b8",
