@@ -15,7 +15,17 @@ export default function Home() {
   useEffect(() => {
     if (userData) {
       setActiveCatalogues(
-        userData.catalogues.filter((catalogue) => Boolean(catalogue.isActive))
+        userData.catalogues
+          .filter((catalogue) => Boolean(catalogue.isActive))
+          .sort((a, b) => {
+            if (a.title < b.title) {
+              return -1;
+            }
+            if (a.title > b.title) {
+              return 1;
+            }
+            return 0;
+          })
       );
     }
   }, [userData]);
