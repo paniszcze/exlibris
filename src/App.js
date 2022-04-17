@@ -14,8 +14,10 @@ import EditCatalogue from "./pages/catalogues/EditCatalogue";
 import Books from "./pages/books/Books";
 import Book from "./pages/books/Book";
 import NewBook from "./pages/books/NewBook";
+import EditBook from "./pages/books/EditBook";
 import Authors from "./pages/authors/Authors";
 import Author from "./pages/authors/Author";
+import Search from "./pages/search/Search";
 import Signup from "./pages/signup/Signup";
 import Login from "./pages/login/Login";
 
@@ -55,12 +57,16 @@ export default function App() {
                 element={user ? <Books /> : <Navigate to="/login" />}
               />
               <Route
+                path="books/new"
+                element={user ? <NewBook /> : <Navigate to="/login" />}
+              />
+              <Route
                 path="books/:id"
                 element={user ? <Book /> : <Navigate to="/login" />}
               />
               <Route
-                path="books/new"
-                element={user ? <NewBook /> : <Navigate to="/login" />}
+                path="books/:id/edit"
+                element={user ? <EditBook /> : <Navigate to="/login" />}
               />
               <Route
                 path="authors"
@@ -77,6 +83,10 @@ export default function App() {
               <Route
                 path="catalogues/:id"
                 element={user ? <Catalogue /> : <Login />}
+              />
+              <Route
+                path="search"
+                element={user ? <Search /> : <Navigate to="/login" />}
               />
               <Route
                 path="login"
