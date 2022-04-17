@@ -1,14 +1,5 @@
 import CreatableSelect from "react-select/creatable";
-import { customStyles, customTheme } from "../utils/selectStyles";
-
-const components = {
-  DropdownIndicator: null,
-};
-
-const createOption = (label) => ({
-  label,
-  value: label,
-});
+import { createOption, customStyles, customTheme } from "../utils/select";
 
 export default function CreatableInputOnly({ state, setState }) {
   const handleChange = (value) => {
@@ -29,10 +20,18 @@ export default function CreatableInputOnly({ state, setState }) {
       case "Enter":
       case "Tab":
         setState((prevState) => {
-          return {
-            inputValue: "",
-            value: [...prevState.value, createOption(state.inputValue)],
-          };
+          let label = prevState.inputValue.trim().replace(/\s+/g, " ");
+          if (prevState.value.some((item) => label === item.label)) {
+            return {
+              inputValue: "",
+              value: [...prevState.value],
+            };
+          } else {
+            return {
+              inputValue: "",
+              value: [...prevState.value, createOption(label)],
+            };
+          }
         });
         event.preventDefault();
       // no default
@@ -41,7 +40,9 @@ export default function CreatableInputOnly({ state, setState }) {
 
   return (
     <CreatableSelect
-      components={components}
+      components={{
+        DropdownIndicator: null,
+      }}
       inputValue={state.inputValue}
       isClearable
       isMulti
