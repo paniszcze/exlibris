@@ -5,6 +5,7 @@ import "./Sidebar.css";
 import ListIcon from "../assets/list_icon.svg";
 import BookIcon from "../assets/book_icon.svg";
 import AuthorIcon from "../assets/author_icon.svg";
+import SearchIcon from "../assets/search_icon.svg";
 import AddIcon from "../assets/add_icon.svg";
 
 export default function Sidebar() {
@@ -36,6 +37,12 @@ export default function Sidebar() {
               <NavLink to="authors">
                 <img src={AuthorIcon} alt="author icon" />
                 <span>Autorzy</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="search">
+                <img src={SearchIcon} alt="search icon" />
+                <span>Szukaj</span>
               </NavLink>
             </li>
             <li>
