@@ -1,8 +1,8 @@
-.btn-container {
+.catalogue-form .btn-container {
   display: flex;
   gap: 6px;
 }
 
-.btn:first-child {
+.catalogue-form .btn:first-child {
   margin-right: auto;
 }

@@ -7,7 +7,7 @@ import { useFirestore } from "../../hooks/useFirestore";
 import "./NewCatalogue.css";
 
 import Select from "react-select";
-import { customStyles, customTheme } from "../../utils/selectStyles";
+import { customStyles, customTheme } from "../../utils/select";
 
 export default function NewCatalogue() {
   const { user } = useAuthContext();
@@ -19,7 +19,7 @@ export default function NewCatalogue() {
   const { updateDocument: updateUser } = useFirestore("users");
 
   const [title, setTitle] = useState("");
-  const [startingIndex, setStartingIndex] = useState(1);
+  const [startingIndex, setStartingIndex] = useState("");
   const [sortBooksBy, setSortBooksBy] = useState("description");
   const [formError, setFormError] = useState(null);
 

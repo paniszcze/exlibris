@@ -8,7 +8,7 @@ import "./Catalogue.css";
 import "./EditCatalogue.css";
 
 import Select from "react-select";
-import { customStyles, customTheme } from "../../utils/selectStyles";
+import { customStyles, customTheme } from "../../utils/select";
 
 export default function EditCatalogue() {
   const navigate = useNavigate();

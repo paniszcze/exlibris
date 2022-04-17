@@ -5,7 +5,6 @@
 .catalogue-list h4 {
   margin: 30px 0 16px;
   font-weight: normal;
-  color: var(--heading-color);
 }
 
 .catalogue-list h4:first-of-type {

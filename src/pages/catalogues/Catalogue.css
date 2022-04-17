@@ -28,6 +28,10 @@
   line-height: 1.5em;
 }
 
+.catalogue li::marker {
+  color: var(--primary-color);
+}
+
 .catalogue a {
   text-decoration: none;
 }
