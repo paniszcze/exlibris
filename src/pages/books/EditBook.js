@@ -186,7 +186,10 @@ export default function EditBook() {
   // C) delete the book
   const handleDelete = async (id) => {
     // prevent from deleting books from archived catalogues
-    if (!book.catalogue.isActive) {
+    if (
+      !userData.catalogues.find((item) => item.id === book.catalogue.id)
+        .isActive
+    ) {
       setFormError(
         `Nie możesz usunąć pozycji przypisanej do zarchiwizowanego katalogu. Zdearchiwizuj najpierw katalog "${book.catalogue.title}".`
       );
