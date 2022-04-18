@@ -1,4 +1,4 @@
-const unshiftLastName = (name) => {
+export const unshiftLastName = (name) => {
   let words = name.split(" ");
   if (words.length === 1) {
     return words[0];
@@ -13,18 +13,18 @@ const unshiftLastName = (name) => {
   return `${lastName}, ${words.join(" ")}`;
 };
 
-// const shiftLastName = (name) => {
-//   let words = name.split(", ");
-//   if (words.length === 1) {
-//     return words[0];
-//   }
+export const shiftLastName = (name) => {
+  let words = name.split(", ");
+  if (words.length === 1) {
+    return words[0];
+  }
 
-//   let lastName = words.shift();
-//   const elision = new RegExp(/^(d'|l')/, "i");
-//   return `${words.join(" ")}${
-//     elision.test(words[words.length - 1]) ? "" : " "
-//   }${lastName}`;
-// };
+  let lastName = words.shift();
+  const elision = new RegExp(/^(d'|l')/, "i");
+  return `${words.join(" ")}${
+    elision.test(words[words.length - 1]) ? "" : " "
+  }${lastName}`;
+};
 
 export const createDescription = (entry) => {
   const description = [];
