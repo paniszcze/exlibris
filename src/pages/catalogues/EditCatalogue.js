@@ -4,7 +4,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useDocument } from "../../hooks/useDocument";
 import { useFirestore } from "../../hooks/useFirestore";
 
-import "./Catalogue.css";
+import "./NewCatalogue.css";
 import "./EditCatalogue.css";
 
 import Select from "react-select";
@@ -111,6 +111,13 @@ export default function EditCatalogue() {
   };
 
   const handleDelete = async (id) => {
+    if (catalogue.books.length !== 0) {
+      setFormError(
+        "Nie możesz usunąć katalogu, który nie jest pusty. Przenieś najpierw swoje książki do innego katalogu."
+      );
+      return;
+    }
+
     await deleteDocument(id);
     await updateUserData(user.uid, {
       catalogues: catalogues.filter((item) => item.id !== id),
@@ -124,7 +131,7 @@ export default function EditCatalogue() {
   if (catalogueError) {
     return <div className="error">{catalogueError}</div>;
   }
-  if (!catalogue) {
+  if (!catalogue || !userData) {
     return <div className="loading">Wczytywanie...</div>;
   }
 

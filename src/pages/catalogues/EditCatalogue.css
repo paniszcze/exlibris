@@ -1,6 +1,7 @@
 .catalogue-form .btn-container {
   display: flex;
   gap: 6px;
+  margin-bottom: 50px;
 }
 
 .catalogue-form .btn:first-child {

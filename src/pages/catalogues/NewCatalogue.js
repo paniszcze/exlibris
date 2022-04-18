@@ -94,6 +94,11 @@ export default function NewCatalogue() {
     }
   };
 
+  // display data fetching status
+  if (!userData) {
+    return <div className="loading">Wczytywanie...</div>;
+  }
+
   return (
     <div className="catalogue-form">
       <h2 className="page-title">Dodaj katalog</h2>

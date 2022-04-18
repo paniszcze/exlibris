@@ -6,3 +6,7 @@
 .book-form .btn:first-child {
   margin-right: auto;
 }
+
+.book-form .error {
+  margin: 25px 0;
+}
