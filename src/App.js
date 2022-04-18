@@ -16,7 +16,6 @@ import Book from "./pages/books/Book";
 import NewBook from "./pages/books/NewBook";
 import EditBook from "./pages/books/EditBook";
 import Authors from "./pages/authors/Authors";
-import Author from "./pages/authors/Author";
 import Search from "./pages/search/Search";
 import Signup from "./pages/signup/Signup";
 import Login from "./pages/login/Login";
@@ -71,10 +70,6 @@ export default function App() {
               <Route
                 path="authors"
                 element={user ? <Authors /> : <Navigate to="/login" />}
-              />
-              <Route
-                path="authors/:id"
-                element={user ? <Author /> : <Navigate to="/login" />}
               />
               <Route
                 path="catalogues"

@@ -1,3 +1,30 @@
+.authors {
+  width: 600px;
+}
+
 .authors .page-title {
   margin-bottom: 30px;
+}
+
+.authors li a {
+  display: block;
+  margin-top: 10px;
+  padding: 16px;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.05);
+  background-color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.authors input {
+  margin-bottom: 24px;
+}
+
+.authors input:focus {
+  border: 1px solid var(--primary-color);
+  box-shadow: 0 0 0 1px var(--primary-color);
+}
+
+.authors input::placeholder {
+  font-style: italic;
 }

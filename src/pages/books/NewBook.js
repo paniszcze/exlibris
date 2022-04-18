@@ -133,6 +133,23 @@ export default function NewBook() {
         await updateCatalogue(catalogue.value, catalogueUpdate);
         // update book count in user data
         await updateUser(user.uid, { bookCount: increment(1) });
+        // update global authors' list
+        const creators = [];
+        [authors, editors, translators].forEach((people) => {
+          people.value.forEach((person) => {
+            if (creators.indexOf(person.value) === -1) {
+              creators.push(person.value);
+            }
+          });
+        });
+        if (creators.length > 0) {
+          await updateAuthors(
+            user.uid,
+            Object.fromEntries(
+              creators.map((name) => [`authors.${name}`, increment(1)])
+            )
+          );
+        }
       }
       // navigate to new book's detail page
       if (docRef) {
