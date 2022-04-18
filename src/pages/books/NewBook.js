@@ -7,6 +7,7 @@ import { arrayUnion, increment } from "firebase/firestore";
 
 import Select from "react-select";
 import CreatableInputOnly from "../../components/CreatableInputOnly";
+import CreatableMulti from "../../components/CreatableMulti";
 import {
   createOption,
   customStyles,
@@ -24,11 +25,16 @@ export default function NewBook() {
   const { user } = useAuthContext();
 
   const { document: userData } = useDocument("users", user.uid);
+  const { document: authorList } = useDocument("authors", user.uid);
   const { addDocument: addBook } = useFirestore("books");
   const { updateDocument: updateCatalogue } = useFirestore("catalogues");
   const { updateDocument: updateUser } = useFirestore("users");
+  const { updateDocument: updateAuthors } = useFirestore("authors");
 
   const [activeCatalogues, setActiveCatalogues] = useState([]);
+  const [existingAuthors, setExistingAuthors] = useState({
+    ...emptyMultiInput,
+  });
   const [formError, setFormError] = useState(null);
 
   const [catalogue, setCatalogue] = useState(null);
@@ -47,7 +53,7 @@ export default function NewBook() {
   const [info, setInfo] = useState("");
   const [categories, setCategories] = useState({ ...emptyMultiInput });
 
-  // create values for react-select
+  // Create options for react-select
   useEffect(() => {
     if (userData) {
       setActiveCatalogues(
@@ -58,10 +64,19 @@ export default function NewBook() {
     }
   }, [userData]);
 
+  useEffect(() => {
+    if (authorList) {
+      setExistingAuthors(
+        Object.keys(authorList.authors).map((author) => createOption(author))
+      );
+    }
+  }, [authorList]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormError(null);
 
+    // Cancel if book hasn't been assigned to any active catalogue
     if (!catalogue) {
       setFormError(
         "Wybierz aktywny katalog, do którego chcesz przypisać nową pozycję"
@@ -69,6 +84,7 @@ export default function NewBook() {
       return;
     }
 
+    // Create entry details and book data
     const entryDetails = {
       title: title.trim(),
       subtitle: subtitle.trim(),
@@ -99,6 +115,7 @@ export default function NewBook() {
       createdBy: user.uid,
     };
 
+    // Create book document and update linked data
     try {
       // create new document
       const docRef = await addBook(book);
@@ -126,6 +143,7 @@ export default function NewBook() {
     }
   };
 
+  // Check for existing active catalogues
   if (userData && activeCatalogues.length === 0) {
     return (
       <p className="error">
@@ -136,126 +154,137 @@ export default function NewBook() {
     );
   }
 
+  // Display data fetching status
+  if (!userData || !authorList) {
+    return <div className="loading">Wczytywanie...</div>;
+  }
+
+  // Render the form for adding new books
   return (
     <div className="book-form">
-      {userData && (
-        <>
-          <h2 className="page-title">Dodaj książkę</h2>
-          <form onSubmit={handleSubmit}>
-            <label>
-              <span>Dodaj do katalogu:</span>
-              <Select
-                onChange={(option) => setCatalogue(option)}
-                options={activeCatalogues}
-                required={true}
-                placeholder="Wybierz z listy"
-                noOptionsMessage={() => "Brak aktywnych katalogów"}
-                isClearable
-                styles={customStyles}
-                theme={customTheme}
-              />
-            </label>
-            <label>
-              <span>Tytuł:</span>
-              <input
-                required
-                type="text"
-                onChange={(e) => setTitle(e.target.value)}
-                value={title}
-              />
-            </label>
-            <label>
-              <span>Podtytuł:</span>
-              <input
-                type="text"
-                onChange={(e) => setSubtitle(e.target.value)}
-                value={subtitle}
-              />
-            </label>
-            <label>
-              <span>Tom:</span>
-              <input
-                type="text"
-                onChange={(e) => setVolume(e.target.value)}
-                value={volume}
-              />
-            </label>
-            <label>
-              <span>Autor:</span>
-              <CreatableInputOnly state={authors} setState={setAuthors} />
-            </label>
-            <label>
-              <span>Tłumacz:</span>
-              <CreatableInputOnly
-                state={translators}
-                setState={setTranslators}
-              />
-            </label>
-            <label>
-              <span>Redaktor:</span>
-              <CreatableInputOnly state={editors} setState={setEditors} />
-            </label>
-            <label>
-              <span>Wydanie:</span>
-              <input
-                type="text"
-                onChange={(e) => setEdition(e.target.value)}
-                value={edition}
-              />
-            </label>
-            <label>
-              <span>Rok wydania:</span>
-              <input
-                type="text"
-                onChange={(e) => setYear(e.target.value)}
-                value={year}
-              />
-            </label>
-            <label>
-              <span>Miejsce wydania:</span>
-              <input
-                type="text"
-                onChange={(e) => setPlace(e.target.value)}
-                value={place}
-              />
-            </label>
-            <label>
-              <span>Wydawca:</span>
-              <input
-                type="text"
-                onChange={(e) => setPublisher(e.target.value)}
-                value={publisher}
-              />
-            </label>
-            <label>
-              <span>Seria wydawnicza:</span>
-              <CreatableInputOnly state={series} setState={setSeries} />
-            </label>
-            <label>
-              <span>Nakład:</span>
-              <input
-                type="text"
-                onChange={(e) => setPrintRun(e.target.value)}
-                value={printRun}
-              />
-            </label>
-            <label>
-              <span>Kategoria:</span>
-              <CreatableInputOnly state={categories} setState={setCategories} />
-            </label>
-            <label>
-              <span>Dodatkowe informacje:</span>
-              <input
-                type="text"
-                onChange={(e) => setInfo(e.target.value)}
-                value={info}
-              />
-            </label>
-            {formError && <p className="error">{formError}</p>}
-            <button className="btn">Dodaj książkę</button>
-          </form>
-        </>
-      )}
+      <h2 className="page-title">Dodaj książkę</h2>
+      <form onSubmit={handleSubmit}>
+        <label>
+          <span>Dodaj do katalogu:</span>
+          <Select
+            onChange={(option) => setCatalogue(option)}
+            options={activeCatalogues}
+            required={true}
+            placeholder="Wybierz z listy"
+            noOptionsMessage={() => "Brak aktywnych katalogów"}
+            isClearable
+            styles={customStyles}
+            theme={customTheme}
+          />
+        </label>
+        <label>
+          <span>Tytuł:</span>
+          <input
+            required
+            type="text"
+            onChange={(e) => setTitle(e.target.value)}
+            value={title}
+          />
+        </label>
+        <label>
+          <span>Podtytuł:</span>
+          <input
+            type="text"
+            onChange={(e) => setSubtitle(e.target.value)}
+            value={subtitle}
+          />
+        </label>
+        <label>
+          <span>Tom:</span>
+          <input
+            type="text"
+            onChange={(e) => setVolume(e.target.value)}
+            value={volume}
+          />
+        </label>
+        <label>
+          <span>Autor:</span>
+          <CreatableMulti
+            options={existingAuthors}
+            state={authors}
+            setState={setAuthors}
+          />
+        </label>
+        <label>
+          <span>Tłumacz:</span>
+          <CreatableMulti
+            options={existingAuthors}
+            state={translators}
+            setState={setTranslators}
+          />
+        </label>
+        <label>
+          <span>Redaktor:</span>
+          <CreatableMulti
+            options={existingAuthors}
+            state={editors}
+            setState={setEditors}
+          />
+        </label>
+        <label>
+          <span>Wydanie:</span>
+          <input
+            type="text"
+            onChange={(e) => setEdition(e.target.value)}
+            value={edition}
+          />
+        </label>
+        <label>
+          <span>Rok wydania:</span>
+          <input
+            type="text"
+            onChange={(e) => setYear(e.target.value)}
+            value={year}
+          />
+        </label>
+        <label>
+          <span>Miejsce wydania:</span>
+          <input
+            type="text"
+            onChange={(e) => setPlace(e.target.value)}
+            value={place}
+          />
+        </label>
+        <label>
+          <span>Wydawca:</span>
+          <input
+            type="text"
+            onChange={(e) => setPublisher(e.target.value)}
+            value={publisher}
+          />
+        </label>
+        <label>
+          <span>Seria wydawnicza:</span>
+          <CreatableInputOnly state={series} setState={setSeries} />
+        </label>
+        <label>
+          <span>Nakład:</span>
+          <input
+            type="text"
+            onChange={(e) => setPrintRun(e.target.value)}
+            value={printRun}
+          />
+        </label>
+        <label>
+          <span>Kategoria:</span>
+          <CreatableInputOnly state={categories} setState={setCategories} />
+        </label>
+        <label>
+          <span>Dodatkowe informacje:</span>
+          <input
+            type="text"
+            onChange={(e) => setInfo(e.target.value)}
+            value={info}
+          />
+        </label>
+        {formError && <p className="error">{formError}</p>}
+        <button className="btn">Dodaj książkę</button>
+      </form>
     </div>
   );
 }
