@@ -28,6 +28,9 @@ export const useSignup = () => {
         bookCount: 0,
         catalogues: [],
       });
+      await setDoc(doc(db, "authors", res.user.uid), {
+        authors: {},
+      });
 
       // dispatch login action
       dispatch({ type: "LOGIN", payload: res.user });
