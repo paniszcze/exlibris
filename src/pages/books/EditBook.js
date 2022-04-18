@@ -9,6 +9,7 @@ import "./EditBook.css";
 
 import Select from "react-select";
 import CreatableInputOnly from "../../components/CreatableInputOnly";
+import CreatableMulti from "../../components/CreatableMulti";
 import {
   createOption,
   createMultiInput,
@@ -40,11 +41,14 @@ export default function EditBook() {
   const { updateDocument: updateUserData } = useFirestore("users");
   // c) catalogues -> update/switch catalogue the book has been assigned to
   const { updateDocument: updateCatalogue } = useFirestore("catalogues");
+  // d) author list -> read/update
+  const { document: authorList } = useDocument("authors", user.uid);
+  const { updateDocument: updateAuthors } = useFirestore("authors");
 
   // FORM MANAGEMENT
   const [formError, setFormError] = useState(null);
 
-  // Create react-select options for available catalogues
+  // Create react-select options
   const [activeCatalogues, setActiveCatalogues] = useState([]);
   useEffect(() => {
     if (userData) {
@@ -55,6 +59,17 @@ export default function EditBook() {
       );
     }
   }, [userData]);
+
+  const [existingAuthors, setExistingAuthors] = useState({
+    ...emptyMultiInput,
+  });
+  useEffect(() => {
+    if (authorList) {
+      setExistingAuthors(
+        Object.keys(authorList.authors).map((author) => createOption(author))
+      );
+    }
+  }, [authorList]);
 
   // Input state variables
   const [catalogue, setCatalogue] = useState(null);
@@ -270,15 +285,27 @@ export default function EditBook() {
         </label>
         <label>
           <span>Autor:</span>
-          <CreatableInputOnly state={authors} setState={setAuthors} />
+          <CreatableMulti
+            options={existingAuthors}
+            state={authors}
+            setState={setAuthors}
+          />
         </label>
         <label>
           <span>Tłumacz:</span>
-          <CreatableInputOnly state={translators} setState={setTranslators} />
+          <CreatableMulti
+            options={existingAuthors}
+            state={translators}
+            setState={setTranslators}
+          />
         </label>
         <label>
           <span>Redaktor:</span>
-          <CreatableInputOnly state={editors} setState={setEditors} />
+          <CreatableMulti
+            options={existingAuthors}
+            state={editors}
+            setState={setEditors}
+          />
         </label>
         <label>
           <span>Wydanie:</span>
