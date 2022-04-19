@@ -67,7 +67,12 @@ export default function NewBook() {
   useEffect(() => {
     if (authorList) {
       setExistingAuthors(
-        Object.keys(authorList.authors).map((author) => createOption(author))
+        Object.keys(authorList.authors).reduce((prev, curr) => {
+          if (authorList.authors[curr] > 0) {
+            prev.push(createOption(curr));
+          }
+          return prev;
+        }, [])
       );
     }
   }, [authorList]);

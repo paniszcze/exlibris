@@ -20,7 +20,7 @@ import {
 } from "../../utils/select";
 
 import { createDescription } from "../../utils/description";
-import { hasBookChanged } from "../../utils/bookData";
+import { hasBookChanged, haveCreatorsChanged } from "../../utils/bookData";
 
 export default function EditBook() {
   // Context and router hooks
@@ -66,7 +66,12 @@ export default function EditBook() {
   useEffect(() => {
     if (authorList) {
       setExistingAuthors(
-        Object.keys(authorList.authors).map((author) => createOption(author))
+        Object.keys(authorList.authors).reduce((prev, curr) => {
+          if (authorList.authors[curr] > 0) {
+            prev.push(createOption(curr));
+          }
+          return prev;
+        }, [])
       );
     }
   }, [authorList]);
@@ -156,7 +161,23 @@ export default function EditBook() {
           id: id,
         }),
       });
-      // 3) update props in book document
+      // 3) update user's authors list
+      const creators = haveCreatorsChanged(
+        book.entryDetails,
+        updatedEntryDetails
+      );
+      if (creators.haveChanged) {
+        await updateAuthors(
+          user.uid,
+          Object.fromEntries(
+            creators.changes.map((change) => [
+              `authors.${change[0]}`,
+              increment(change[1]),
+            ])
+          )
+        );
+      }
+      // 4) update props in book document
       await updateBook(id, {
         entryDetails: updatedEntryDetails,
         "catalogue.description": createDescription(updatedEntryDetails),
@@ -221,6 +242,23 @@ export default function EditBook() {
     });
     // decrement book count in user data
     await updateUserData(user.uid, { bookCount: increment(-1) });
+    // update user's authors list
+    const creators = [];
+    [authors, editors, translators].forEach((people) => {
+      people.value.forEach((person) => {
+        if (creators.indexOf(person.value) === -1) {
+          creators.push(person.value);
+        }
+      });
+    });
+    if (creators.length > 0) {
+      await updateAuthors(
+        user.uid,
+        Object.fromEntries(
+          creators.map((name) => [`authors.${name}`, increment(-1)])
+        )
+      );
+    }
     // delete book document
     await deleteBook(id);
 
