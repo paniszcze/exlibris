@@ -9,16 +9,24 @@ export default function BookList({ books }) {
         <p className="info">Brak książek do wyświetlenia</p>
       ) : (
         <div className="book-list">
-          {books.map((book) => (
-            <Link to={`/books/${book.id}`} key={book.id}>
-              <h4>{book.entryDetails.title}</h4>
-              {book.entryDetails.authors.length > 0 && (
-                <p>
-                  {book.entryDetails.authors.map((author) => author).join(", ")}
-                </p>
-              )}
-            </Link>
-          ))}
+          {[...books]
+            .sort((a, b) => {
+              if (a.title < b.title) {
+                return -1;
+              }
+              if (a.title > b.title) {
+                return 1;
+              }
+              return 0;
+            })
+            .map((book) => (
+              <Link to={`/books/${book.id}`} key={book.id}>
+                <h4>{book.title}</h4>
+                {book.authors.length > 0 && (
+                  <p>{book.authors.map((author) => author).join(", ")}</p>
+                )}
+              </Link>
+            ))}
         </div>
       )}
     </>
