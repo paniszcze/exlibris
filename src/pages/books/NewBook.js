@@ -30,6 +30,7 @@ export default function NewBook() {
   const { updateDocument: updateCatalogue } = useFirestore("catalogues");
   const { updateDocument: updateUser } = useFirestore("users");
   const { updateDocument: updateAuthors } = useFirestore("authors");
+  const { updateDocument: updateIndex } = useFirestore("index");
 
   const [activeCatalogues, setActiveCatalogues] = useState([]);
   const [existingAuthors, setExistingAuthors] = useState({
@@ -155,6 +156,28 @@ export default function NewBook() {
             )
           );
         }
+        // index update
+        await updateIndex(
+          user.uid,
+          Object.fromEntries([
+            [
+              `books.${docRef.id}`,
+              {
+                title: book.entryDetails.title,
+                subtitle: book.entryDetails.subtitle,
+                authors: book.entryDetails.authors,
+                translators: book.entryDetails.translators,
+                editors: book.entryDetails.editors,
+                publisher: book.entryDetails.publisher,
+                series: book.entryDetails.series,
+                tags: book.entryDetails.tags,
+                description: book.catalogue.description,
+                id: docRef.id,
+                catalogue: book.catalogue.title,
+              },
+            ],
+          ])
+        );
       }
       // navigate to new book's detail page
       if (docRef) {

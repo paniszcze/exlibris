@@ -31,6 +31,7 @@ export const useSignup = () => {
       await setDoc(doc(db, "authors", res.user.uid), {
         authors: {},
       });
+      await setDoc(doc(db, "index", res.user.uid), {});
 
       // dispatch login action
       dispatch({ type: "LOGIN", payload: res.user });

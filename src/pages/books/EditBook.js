@@ -3,7 +3,12 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useDocument } from "../../hooks/useDocument";
 import { useFirestore } from "../../hooks/useFirestore";
-import { arrayRemove, arrayUnion, increment } from "firebase/firestore";
+import {
+  arrayRemove,
+  arrayUnion,
+  deleteField,
+  increment,
+} from "firebase/firestore";
 
 import "./EditBook.css";
 
@@ -44,6 +49,8 @@ export default function EditBook() {
   // d) author list -> read/update
   const { document: authorList } = useDocument("authors", user.uid);
   const { updateDocument: updateAuthors } = useFirestore("authors");
+  // e) user's book index -> update
+  const { updateDocument: updateIndex } = useFirestore("index");
 
   // FORM MANAGEMENT
   const [formError, setFormError] = useState(null);
@@ -153,6 +160,7 @@ export default function EditBook() {
         }),
       });
       // 2) add updated book data to destination catalogue
+      //    (destination can be the same as source)
       await updateCatalogue(catalogue.value, {
         books: arrayUnion({
           title: updatedEntryDetails.title,
@@ -177,7 +185,29 @@ export default function EditBook() {
           )
         );
       }
-      // 4) update props in book document
+      // 4) update user's book index
+      await updateIndex(
+        user.uid,
+        Object.fromEntries([
+          [
+            `books.${book.id}`,
+            {
+              title: updatedEntryDetails.title,
+              subtitle: updatedEntryDetails.subtitle,
+              authors: updatedEntryDetails.authors,
+              translators: updatedEntryDetails.translators,
+              editors: updatedEntryDetails.editors,
+              publisher: updatedEntryDetails.publisher,
+              series: updatedEntryDetails.series,
+              tags: updatedEntryDetails.tags,
+              description: createDescription(updatedEntryDetails),
+              id: book.id,
+              catalogue: catalogue.label,
+            },
+          ],
+        ])
+      );
+      // 5) update props in book document
       await updateBook(id, {
         entryDetails: updatedEntryDetails,
         "catalogue.description": createDescription(updatedEntryDetails),
@@ -242,6 +272,11 @@ export default function EditBook() {
     });
     // decrement book count in user data
     await updateUserData(user.uid, { bookCount: increment(-1) });
+    // delete book from user's index
+    await updateIndex(
+      user.uid,
+      Object.fromEntries([[`books.${book.id}`, deleteField()]])
+    );
     // update user's authors list
     const creators = [];
     [authors, editors, translators].forEach((people) => {
