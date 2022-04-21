@@ -157,6 +157,7 @@ export default function EditBook() {
           description: book.catalogue.description,
           isDisposed: book.catalogue.isDisposed,
           id: id,
+          createdAt: book.catalogue.createdAt,
         }),
       });
       // 2) add updated book data to destination catalogue
@@ -167,6 +168,7 @@ export default function EditBook() {
           description: createDescription(updatedEntryDetails),
           isDisposed: book.catalogue.isDisposed,
           id: id,
+          createdAt: book.catalogue.createdAt,
         }),
       });
       // 3) update user's authors list
@@ -233,6 +235,7 @@ export default function EditBook() {
         description: book.catalogue.description,
         isDisposed: book.catalogue.isDisposed,
         id: book.id,
+        createdAt: book.catalogue.createdAt,
       }),
     });
     await updateCatalogue(book.catalogue.id, {
@@ -241,6 +244,7 @@ export default function EditBook() {
         description: book.catalogue.description,
         isDisposed: toggledValue,
         id: book.id,
+        createdAt: book.catalogue.createdAt,
       }),
     });
 
@@ -268,6 +272,7 @@ export default function EditBook() {
         description: book.catalogue.description,
         isDisposed: book.catalogue.isDisposed,
         id: book.id,
+        createdAt: book.catalogue.createdAt,
       }),
     });
     // decrement book count in user data

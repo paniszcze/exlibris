@@ -26,7 +26,14 @@ export default function Catalogue() {
               .filter(Boolean)
               .sort((a, b) => {
                 let key = catalogue.sortBooksBy;
-                return new Intl.Collator("pl").compare(a[key], b[key]);
+                if (key === "createdAt") {
+                  return new Intl.Collator("pl").compare(
+                    a[key].toString(),
+                    b[key].toString()
+                  );
+                } else {
+                  return new Intl.Collator("pl").compare(a[key], b[key]);
+                }
               })
               .map((book) => (
                 <li key={book.id} className={book.isDisposed ? "disposed" : ""}>

@@ -39,6 +39,7 @@ export default function NewCatalogue() {
   const sortingOptions = [
     { value: "description", label: "nazwisku autora" },
     { value: "title", label: "tytule książki" },
+    { value: "createdAt", label: "kolejności dodawania" },
   ];
 
   const handleSubmit = async (e) => {

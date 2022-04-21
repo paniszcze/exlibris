@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useDocument } from "../../hooks/useDocument";
 import { useFirestore } from "../../hooks/useFirestore";
-import { arrayUnion, increment } from "firebase/firestore";
+import { arrayUnion, increment, Timestamp } from "firebase/firestore";
 
 import Select from "react-select";
 import CreatableInputOnly from "../../components/CreatableInputOnly";
@@ -115,6 +115,7 @@ export default function NewBook() {
         isDisposed: false,
         record: "",
         description: createDescription(entryDetails),
+        createdAt: Timestamp.fromDate(new Date()),
       },
       entryDetails,
       notes: [],
@@ -134,6 +135,7 @@ export default function NewBook() {
             description: book.catalogue.description,
             isDisposed: false,
             id: docRef.id,
+            createdAt: book.catalogue.createdAt,
           }),
         };
         await updateCatalogue(catalogue.value, catalogueUpdate);

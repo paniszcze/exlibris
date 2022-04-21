@@ -31,6 +31,7 @@ export default function EditCatalogue() {
   const sortingOptions = [
     { value: "description", label: "nazwisku autora" },
     { value: "title", label: "tytule książki" },
+    { value: "createdAt", label: "kolejności dodawania" },
   ];
 
   // populate input with current catalogue's props
@@ -169,7 +170,9 @@ export default function EditCatalogue() {
               label:
                 catalogue.sortBooksBy === "description"
                   ? "nazwisku autora"
-                  : "tytule książki",
+                  : catalogue.sortBooksBy === "title"
+                  ? "tytule książki"
+                  : "kolejności dodawania",
             }}
             isClearable={false}
             isDisabled={!catalogue.isActive}
