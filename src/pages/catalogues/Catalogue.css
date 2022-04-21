@@ -36,6 +36,10 @@
   text-decoration: none;
 }
 
+.catalogue + a {
+  margin-bottom: 40px;
+}
+
 .catalogue .disposed {
   text-decoration: line-through;
 }

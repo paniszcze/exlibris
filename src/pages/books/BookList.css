@@ -1,7 +1,7 @@
 .book-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  grid-gap: 20px;
+  grid-gap: 10px;
 }
 
 .book-list a {

@@ -16,7 +16,7 @@ export default function BookDetails({ entry, record, isDisposed }) {
             <h4>Autor:</h4>
             <p>
               {entry.authors.map((author, index) => (
-                <Link to="#" key={index}>
+                <Link to={`/search?author=${author.toLowerCase()}`} key={index}>
                   {author}
                 </Link>
               ))}
@@ -28,7 +28,12 @@ export default function BookDetails({ entry, record, isDisposed }) {
             <h4>Tłumacz:</h4>
             <p>
               {entry.translators.map((translator, index) => (
-                <span key={index}>{translator}</span>
+                <Link
+                  to={`/search?author=${translator.toLowerCase()}`}
+                  key={index}
+                >
+                  {translator}
+                </Link>
               ))}
             </p>
           </>
@@ -38,7 +43,9 @@ export default function BookDetails({ entry, record, isDisposed }) {
             <h4>Redaktor:</h4>
             <p>
               {entry.editors.map((editor, index) => (
-                <span key={index}>{editor}</span>
+                <Link to={`/search?author=${editor.toLowerCase()}`} key={index}>
+                  {editor}
+                </Link>
               ))}
             </p>
           </>
