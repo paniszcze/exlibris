@@ -10,15 +10,12 @@ export default function BookList({ books }) {
       ) : (
         <div className="book-list">
           {[...books]
-            .sort((a, b) => {
-              if (a.title < b.title) {
-                return -1;
-              }
-              if (a.title > b.title) {
-                return 1;
-              }
-              return 0;
-            })
+            .sort((a, b) =>
+              new Intl.Collator("pl", { ignorePunctuation: true }).compare(
+                a.title,
+                b.title
+              )
+            )
             .map((book) => (
               <Link to={`/books/${book.id}`} key={book.id}>
                 <h4>{book.title}</h4>

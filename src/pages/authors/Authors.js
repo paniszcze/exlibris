@@ -48,15 +48,7 @@ export default function Authors() {
                   let reg = new RegExp(input.trim(), "gi");
                   return reg.test(name);
                 })
-                .sort((a, b) => {
-                  if (a < b) {
-                    return -1;
-                  }
-                  if (a > b) {
-                    return 1;
-                  }
-                  return 0;
-                })
+                .sort(new Intl.Collator("pl").compare)
                 .map((name, index) => (
                   <li key={index}>
                     <Link
