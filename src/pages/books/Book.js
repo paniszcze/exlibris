@@ -19,11 +19,7 @@ export default function Book() {
 
   return (
     <div className="book">
-      <BookDetails
-        entry={book.entryDetails}
-        record={book.catalogue.record}
-        isDisposed={book.catalogue.isDisposed}
-      />
+      <BookDetails entry={book.entryDetails} catalogue={book.catalogue} />
       <BookNotes notes={book.notes} bookId={id} />
     </div>
   );

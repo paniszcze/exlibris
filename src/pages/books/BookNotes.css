@@ -3,6 +3,7 @@
 }
 
 .book-notes textarea {
+  resize: vertical;
   min-height: 80px;
 }
 
@@ -37,6 +38,10 @@
 .book-notes img {
   width: 20px;
   filter: invert(50%);
+}
+
+.book-notes img:hover {
+  filter: invert(30%);
 }
 
 .book-notes .btn {

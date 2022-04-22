@@ -55,6 +55,16 @@
   margin-right: 0;
 }
 
-.book-details + .btn {
-  margin-top: 20px;
+.book-block .btn-container {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.book-block .btn:first-child {
+  margin-right: auto;
+}
+
+.btn-container button {
+  margin: 0;
 }

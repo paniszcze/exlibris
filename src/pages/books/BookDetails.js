@@ -1,12 +1,18 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import "./BookDetails.css";
 
-export default function BookDetails({ entry, record, isDisposed }) {
+import Modal from "../../components/Modal";
+import BookDescription from "./BookDescription";
+
+export default function BookDetails({ entry, catalogue }) {
+  const [showDescription, setShowDescription] = useState(false);
+
   return (
-    <div>
+    <div className="book-block">
       <div className="book-details">
-        <h2 className={`page-title${isDisposed ? " disposed" : ""}`}>
+        <h2 className={`page-title${catalogue.isDisposed ? " disposed" : ""}`}>
           {entry.title}
         </h2>
         {entry.subtitle && <h3>{entry.subtitle}</h3>}
@@ -114,16 +120,29 @@ export default function BookDetails({ entry, record, isDisposed }) {
             <p>{entry.info}</p>
           </>
         )}
-        {record && (
+        {catalogue.record && (
           <>
             <h4>Numer katalogowy:</h4>
-            <p>{record}</p>
+            <p>{catalogue.record}</p>
           </>
         )}
       </div>
-      <Link to="edit" className="btn">
-        Edytuj pozycję
-      </Link>
+      <div className="btn-container">
+        <Link to="edit" className="btn">
+          Edytuj pozycję
+        </Link>
+        <button onClick={() => setShowDescription(true)} className="btn">
+          Pokaż opis
+        </button>
+        <Link to={`/catalogues/${catalogue.id}`} className="btn">
+          Zobacz w katalogu
+        </Link>
+      </div>
+      {showDescription && (
+        <Modal setIsOpen={setShowDescription}>
+          <BookDescription description={catalogue.description} />
+        </Modal>
+      )}
     </div>
   );
 }

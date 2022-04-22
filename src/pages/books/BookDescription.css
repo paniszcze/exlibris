@@ -1,0 +1,21 @@
+.book-description {
+  display: flex;
+  flex-direction: column;
+}
+
+.book-description h3 {
+  margin-bottom: 20px;
+  color: var(--primary-color);
+}
+
+.book-description textarea {
+  resize: none;
+  min-height: 80px;
+  color: var(--text-color);
+  font-style: italic;
+}
+
+.book-description .btn {
+  margin-top: 20px;
+  margin-left: auto;
+}
