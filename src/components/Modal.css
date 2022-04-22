@@ -1,0 +1,41 @@
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+}
+
+.modal {
+  position: relative;
+  width: 600px;
+  box-sizing: border-box;
+  margin: auto;
+  padding: 30px;
+  background: #fff;
+  border-radius: 4px;
+}
+
+.modal .close {
+  display: block;
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  top: 0;
+  right: 0;
+  translate: -100% 105%;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+}
+
+.close img {
+  width: 24px;
+  filter: invert(50%);
+}
+
+.close img:hover {
+  filter: invert(30%);
+}
