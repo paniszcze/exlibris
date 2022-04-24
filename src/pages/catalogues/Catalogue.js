@@ -23,18 +23,12 @@ export default function Catalogue() {
         {catalogue.books.length > 0 ? (
           <ol start={catalogue.startingIndex}>
             {catalogue.books
-              .filter(Boolean)
-              .sort((a, b) => {
-                let key = catalogue.sortBooksBy;
-                if (key === "createdAt") {
-                  return new Intl.Collator("pl").compare(
-                    a[key].toString(),
-                    b[key].toString()
-                  );
-                } else {
-                  return new Intl.Collator("pl").compare(a[key], b[key]);
-                }
-              })
+              .sort((a, b) =>
+                new Intl.Collator("pl").compare(
+                  a[catalogue.sortBooksBy].toString(),
+                  b[catalogue.sortBooksBy].toString()
+                )
+              )
               .map((book) => (
                 <li key={book.id} className={book.isDisposed ? "disposed" : ""}>
                   <Link to={`/books/${book.id}`}>{book.description}</Link>
