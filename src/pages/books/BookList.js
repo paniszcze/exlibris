@@ -74,10 +74,13 @@ export default function BookList({ books }) {
           filter &&
           sortedBooks.get(filter).map((book) => (
             <Link to={`/books/${book.id}`} key={book.id}>
-              <h4>{book.title}</h4>
-              {book.authors.length > 0 && (
-                <p>{book.authors.map((author) => author).join(", ")}</p>
-              )}
+              <h4 className={book.isDisposed ? "disposed" : ""}>{book.title}</h4>
+              <div className="tile-details">
+                {book.authors.length > 0 && (
+                  <p>{book.authors.map((author) => author).join(", ")}</p>
+                )}
+                {book.record && <p className="record">{book.record}</p>}
+              </div>
             </Link>
           ))}
       </div>

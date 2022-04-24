@@ -22,7 +22,23 @@
   color: var(--heading-color);
 }
 
+.book-list h4.disposed {
+  font-weight: normal;
+  text-decoration: line-through;
+}
+
 .book-list p {
   color: var(--text-color);
   font-size: 0.9em;
+}
+
+.book-list p.record {
+  margin-left: auto;
+  color: var(--highlight-color);
+}
+
+.book-list .tile-details {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
 }
