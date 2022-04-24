@@ -21,8 +21,32 @@ export const createMultiInput = (labelList) => {
   };
 };
 
+export const getUniqueFromMultiInput = (...inputs) => {
+  const uniques = [];
+  inputs.forEach((input) => {
+    input.value.forEach((option) => {
+      if (uniques.indexOf(option.value) === -1) {
+        uniques.push(option.value);
+      }
+    });
+  });
+  return uniques;
+};
+
 export const listSelectedValues = (selectState) =>
   [...selectState.value].map((item) => item.value);
+
+// constant options
+export const sortingOptions = [
+  { value: "description", label: "nazwisku autora" },
+  { value: "title", label: "tytule książki" },
+  { value: "createdAt", label: "kolejności dodawania" },
+];
+
+export const indexingOptions = [
+  { value: true, label: "tak" },
+  { value: false, label: "nie" },
+];
 
 // custom theme adjustments
 const replacementColors = {
