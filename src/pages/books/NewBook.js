@@ -14,6 +14,7 @@ import {
   customTheme,
   emptyMultiInput,
   listSelectedValues,
+  getUniqueFromMultiInput,
 } from "../../utils/select";
 
 import { createDescription } from "../../utils/description";
@@ -60,6 +61,7 @@ export default function NewBook() {
       setActiveCatalogues(
         userData.catalogues
           .filter((catalogue) => Boolean(catalogue.isActive))
+          .sort((a, b) => new Intl.Collator("pl").compare(a.title, b.title))
           .map((catalogue) => createOption(catalogue.title, catalogue.id))
       );
     }
@@ -82,6 +84,7 @@ export default function NewBook() {
     e.preventDefault();
     setFormError(null);
 
+    // Input validation:
     // Cancel if book hasn't been assigned to any active catalogue
     if (!catalogue) {
       setFormError(
@@ -113,6 +116,9 @@ export default function NewBook() {
         id: catalogue.value,
         title: catalogue.label,
         isDisposed: false,
+        isIndexed: userData.catalogues.find(
+          (item) => item.id === catalogue.value
+        ).isIndexed,
         record: "",
         description: createDescription(entryDetails),
         createdAt: Timestamp.fromDate(new Date()),
@@ -122,13 +128,13 @@ export default function NewBook() {
       createdBy: user.uid,
     };
 
-    // Create book document and update linked data
     try {
-      // create new document
+      // Create a new book document
       const docRef = await addBook(book);
-      // proceed if the document has been successfully created
+
+      // Proceed if the document has been successfully created
       if (docRef) {
-        // update catalogue entries by adding new book's summary and ref
+        // A) update catalogue entries by adding new book's summary and ref
         const catalogueUpdate = {
           books: arrayUnion({
             title: book.entryDetails.title,
@@ -139,50 +145,55 @@ export default function NewBook() {
           }),
         };
         await updateCatalogue(catalogue.value, catalogueUpdate);
-        // update book count in user data
-        await updateUser(user.uid, { bookCount: increment(1) });
-        // update global authors' list
-        const creators = [];
-        [authors, editors, translators].forEach((people) => {
-          people.value.forEach((person) => {
-            if (creators.indexOf(person.value) === -1) {
-              creators.push(person.value);
-            }
-          });
-        });
-        if (creators.length > 0) {
-          await updateAuthors(
+
+        // B) only if destination catalogue is indexed, proceed with:
+        //   - incrementing global book count in user data,
+        //   - updating user's authors list,
+        //   - updating user's book index
+        if (book.catalogue.isIndexed) {
+          // 1) update book count
+          await updateUser(user.uid, { bookCount: increment(1) });
+          // 2) update authors list
+          const creators = getUniqueFromMultiInput(
+            authors,
+            editors,
+            translators
+          );
+          if (creators.length > 0) {
+            await updateAuthors(
+              user.uid,
+              Object.fromEntries(
+                creators.map((name) => [`authors.${name}`, increment(1)])
+              )
+            );
+          }
+          // 3) update book index
+          await updateIndex(
             user.uid,
-            Object.fromEntries(
-              creators.map((name) => [`authors.${name}`, increment(1)])
-            )
+            Object.fromEntries([
+              [
+                `books.${docRef.id}`,
+                {
+                  id: docRef.id,
+                  title: book.entryDetails.title,
+                  subtitle: book.entryDetails.subtitle,
+                  authors: book.entryDetails.authors,
+                  translators: book.entryDetails.translators,
+                  editors: book.entryDetails.editors,
+                  publisher: book.entryDetails.publisher,
+                  series: book.entryDetails.series,
+                  tags: book.entryDetails.tags,
+                  description: book.catalogue.description,
+                  record: book.catalogue.record,
+                  isDisposed: book.catalogue.isDisposed,
+                  catalogue: book.catalogue.title,
+                },
+              ],
+            ])
           );
         }
-        // index update
-        await updateIndex(
-          user.uid,
-          Object.fromEntries([
-            [
-              `books.${docRef.id}`,
-              {
-                title: book.entryDetails.title,
-                subtitle: book.entryDetails.subtitle,
-                authors: book.entryDetails.authors,
-                translators: book.entryDetails.translators,
-                editors: book.entryDetails.editors,
-                publisher: book.entryDetails.publisher,
-                series: book.entryDetails.series,
-                tags: book.entryDetails.tags,
-                description: book.catalogue.description,
-                id: docRef.id,
-                catalogue: book.catalogue.title,
-              },
-            ],
-          ])
-        );
-      }
-      // navigate to new book's detail page
-      if (docRef) {
+
+        // C) navigate to new book's detail page
         navigate(`/books/${docRef.id}`);
       }
     } catch (error) {
@@ -206,7 +217,6 @@ export default function NewBook() {
     return <div className="loading">Wczytywanie...</div>;
   }
 
-  // Render the form for adding new books
   return (
     <div className="book-form">
       <h2 className="page-title">Dodaj książkę</h2>
@@ -330,7 +340,9 @@ export default function NewBook() {
           />
         </label>
         {formError && <p className="error">{formError}</p>}
-        <button className="btn">Dodaj książkę</button>
+        <button type="submit" className="btn">
+          Dodaj książkę
+        </button>
       </form>
     </div>
   );

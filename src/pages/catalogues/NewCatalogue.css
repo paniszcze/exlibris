@@ -1,7 +1,8 @@
 .catalogue-form {
   max-width: 600px;
+  margin-bottom: 40px;
 }
 
-.catalogue-form .error{
+.catalogue-form .error {
   margin: 25px 0;
 }

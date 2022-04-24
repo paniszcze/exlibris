@@ -3,49 +3,54 @@ import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useDocument } from "../../hooks/useDocument";
 import { useFirestore } from "../../hooks/useFirestore";
+import { arrayUnion } from "firebase/firestore";
 
 import "./NewCatalogue.css";
 
 import Select from "react-select";
-import { customStyles, customTheme } from "../../utils/select";
+import {
+  sortingOptions,
+  indexingOptions,
+  customStyles,
+  customTheme,
+} from "../../utils/select";
 
 export default function NewCatalogue() {
-  const { user } = useAuthContext();
+  // Context and router hooks
   const navigate = useNavigate();
+  const { user } = useAuthContext();
 
+  // Firestore hooks:
+  // a) user data -> read/update existing catalogues
   const { document: userData } = useDocument("users", user.uid);
+  const { updateDocument: updateUser } = useFirestore("users");
+  // b) catalogues -> add new catalogue
   const { addDocument: addCatalogue, response: catalogueResponse } =
     useFirestore("catalogues");
-  const { updateDocument: updateUser } = useFirestore("users");
 
+  // Catalogue form inputs
   const [title, setTitle] = useState("");
-  const [startingIndex, setStartingIndex] = useState("");
+  const [startingIndex, setStartingIndex] = useState(1);
   const [sortBooksBy, setSortBooksBy] = useState("description");
+  const [isIndexed, setIsIndexed] = useState(true);
+
+  // Form managment
   const [formError, setFormError] = useState(null);
-
-  const [catalogues, setCatalogues] = useState([]);
   const [restrictedTitles, setRestrictedTitles] = useState([]);
-
   useEffect(() => {
     if (userData) {
-      setCatalogues([...userData.catalogues]);
       setRestrictedTitles(
         userData.catalogues.map((catalogue) => catalogue.title)
       );
-      setStartingIndex(userData.bookCount + 1);
     }
   }, [userData]);
 
-  const sortingOptions = [
-    { value: "description", label: "nazwisku autora" },
-    { value: "title", label: "tytule książki" },
-    { value: "createdAt", label: "kolejności dodawania" },
-  ];
-
+  // BUTTON HANDLER
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormError(null);
 
+    // Input validation
     if (restrictedTitles.includes(title.trim())) {
       setFormError(`Masz już katalog o nazwie "${title.trim()}"`);
       return;
@@ -57,33 +62,34 @@ export default function NewCatalogue() {
     }
     if (parsedNumber < 1) {
       setFormError(
-        "Nie możesz rozpocząć indeksowania od liczby ujemnej lub zera"
+        "Nie możesz rozpocząć numerowania od liczby ujemnej lub zera"
       );
       return;
     }
 
+    // Create an object representing the new catalogue
     const catalogue = {
       isActive: true,
       title: title.trim(),
       startingIndex: parsedNumber,
+      isIndexed,
       sortBooksBy,
       books: [],
       createdBy: user.uid,
     };
 
+    // Add new catalogue and update user data
     try {
       const docRef = await addCatalogue(catalogue);
 
       if (docRef) {
         await updateUser(user.uid, {
-          catalogues: [
-            ...catalogues,
-            {
-              id: docRef.id,
-              title: title.trim(),
-              isActive: true,
-            },
-          ],
+          catalogues: arrayUnion({
+            id: docRef.id,
+            title: title.trim(),
+            isActive: true,
+            isIndexed,
+          }),
         });
       }
 
@@ -95,7 +101,7 @@ export default function NewCatalogue() {
     }
   };
 
-  // display data fetching status
+  // Data fetching status
   if (!userData) {
     return <div className="loading">Wczytywanie...</div>;
   }
@@ -114,7 +120,7 @@ export default function NewCatalogue() {
           />
         </label>
         <label>
-          <span>Rozpocznij indeksowanie od:</span>
+          <span>Rozpocznij numerowanie od:</span>
           <input
             required
             type="number"
@@ -128,6 +134,17 @@ export default function NewCatalogue() {
             onChange={(option) => setSortBooksBy(option.value)}
             options={sortingOptions}
             defaultValue={sortingOptions[0]}
+            isClearable={false}
+            styles={customStyles}
+            theme={customTheme}
+          />
+        </label>
+        <label>
+          <span>Indeksuj pozycje z katalogu:</span>
+          <Select
+            onChange={(option) => setIsIndexed(option.value)}
+            options={indexingOptions}
+            defaultValue={indexingOptions[0]}
             isClearable={false}
             styles={customStyles}
             theme={customTheme}

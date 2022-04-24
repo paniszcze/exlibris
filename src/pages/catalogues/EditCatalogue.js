@@ -8,38 +8,40 @@ import "./NewCatalogue.css";
 import "./EditCatalogue.css";
 
 import Select from "react-select";
-import { customStyles, customTheme } from "../../utils/select";
+import { sortingOptions, customStyles, customTheme } from "../../utils/select";
 
 export default function EditCatalogue() {
+  // Context and router hooks
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const { id } = useParams();
 
+  // Firestore hooks
+  // a) user data -> read/update existing catalogues
+  const { document: userData } = useDocument("users", user.uid);
+  const { updateDocument: updateUserData } = useFirestore("users");
+  // b) catalogues -> read/update/delete current catalogue
   const { document: catalogue, error: catalogueError } = useDocument(
     "catalogues",
     id
   );
-  const { document: userData } = useDocument("users", user.uid);
   const {
     updateDocument: updateCatalogue,
     deleteDocument,
     response,
   } = useFirestore("catalogues");
-  const { updateDocument: updateUserData } = useFirestore("users");
+  // c) user's book index -> update
+  const { updateDocument: updateIndex } = useFirestore("index");
+  // d) books collection -> update books contained in catalogue
+  const { updateDocument: updateBook } = useFirestore("books");
 
-  // react select options
-  const sortingOptions = [
-    { value: "description", label: "nazwisku autora" },
-    { value: "title", label: "tytule książki" },
-    { value: "createdAt", label: "kolejności dodawania" },
-  ];
-
-  // populate input with current catalogue's props
+  // Catalogue form inputs. Note that the catalogue indexing (isIndexed)
+  // is not allowed to be modified.
   const [title, setTitle] = useState("");
   const [startingIndex, setStartingIndex] = useState(1);
   const [sortBooksBy, setSortBooksBy] = useState("");
-  const [formError, setFormError] = useState(null);
 
+  // Populate input with current catalogue's props.
   useEffect(() => {
     if (catalogue) {
       setTitle(catalogue.title);
@@ -48,10 +50,10 @@ export default function EditCatalogue() {
     }
   }, [catalogue]);
 
-  // store restricted catalogue names
-  const [catalogues, setCatalogues] = useState([]);
+  // Form managment
+  const [formError, setFormError] = useState(null);
   const [restrictedTitles, setRestrictedTitles] = useState([]);
-
+  const [catalogues, setCatalogues] = useState([]);
   useEffect(() => {
     if (userData) {
       setCatalogues([...userData.catalogues]);
@@ -61,11 +63,13 @@ export default function EditCatalogue() {
     }
   }, [userData]);
 
-  // button handlers
+  // BUTTON HANDLERS
+  // A) submit catalogue update
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormError(null);
 
+    // Input validation
     if (restrictedTitles.includes(title.trim()) && title !== catalogue.title) {
       setFormError(`Masz już inny katalog o nazwie "${title.trim()}"`);
       return;
@@ -82,39 +86,99 @@ export default function EditCatalogue() {
       return;
     }
 
+    // Update user data, index and books, only if catalogue's title has changed.
+    const newTitle = title.trim();
+    if (catalogue.title !== newTitle) {
+      // 1) catalogue list in user data
+      await updateUserData(user.uid, {
+        catalogues: catalogues.map((item) =>
+          item.id === id ? { ...item, title: newTitle } : item
+        ),
+      });
+      // 2) books...
+      const books = catalogue.books.map((book) => book.id);
+      // 2a) ...in user's book index
+      await updateIndex(
+        user.uid,
+        Object.fromEntries(
+          books.map((bookId) => [`books.${bookId}.catalogue`, newTitle])
+        )
+      );
+      // 2b) ...in firestore collection
+      books.forEach(async (bookId) => {
+        await updateBook(bookId, { "catalogue.title": newTitle });
+      });
+    }
+
+    // Update current catalogue document
     await updateCatalogue(id, {
       title: title.trim(),
       startingIndex: parsedNumber,
       sortBooksBy,
     });
-    await updateUserData(user.uid, {
-      catalogues: catalogues.map((item) =>
-        item.id === id ? { ...item, title: title.trim() } : item
-      ),
-    });
 
     if (!response.error) {
       navigate(`/catalogues/${id}`);
     }
   };
 
+  // B) archive catalogue
   const toggleIsActive = async (id) => {
-    const toggledValue = !catalogue.isActive;
-    await updateCatalogue(id, { isActive: toggledValue });
+    const currActive = !catalogue.isActive;
+    // update current catalogue document
+    await updateCatalogue(id, { isActive: currActive });
+    // update catalogues list in user data
     await updateUserData(user.uid, {
       catalogues: catalogues.map((item) =>
-        item.id === id ? { ...item, isActive: toggledValue } : item
+        item.id === id ? { ...item, isActive: currActive } : item
       ),
     });
+    // If the catalogue is indexed, assign (when archiving) or remove (when
+    // de-archiving) a record number to contained books...
+    if (catalogue.isIndexed) {
+      const books = catalogue.books
+        .sort((a, b) =>
+          new Intl.Collator("pl").compare(
+            a[catalogue.sortBooksBy].toString(),
+            b[catalogue.sortBooksBy].toString()
+          )
+        )
+        .map((book) => book.id);
+      // ...in user's book index...
+      await updateIndex(
+        user.uid,
+        Object.fromEntries(
+          books.map((bookId, index) => [
+            `books.${bookId}.record`,
+            currActive
+              ? ""
+              : `${catalogue.title.slice(0, 5)}/${startingIndex + index}`,
+          ])
+        )
+      );
+      // ...and in firestore collection
+      books.forEach(async (bookId, index) => {
+        await updateBook(bookId, {
+          "catalogue.record": currActive
+            ? ""
+            : `${catalogue.title.slice(0, 5)}/${startingIndex + index}`,
+        });
+      });
+      // ///////////
+      // book:    catalogue.record         = update per book document
+      // index:   books.${bookId}.record   = one update with as many fields as there are books
+    }
+
     if (!response.error) {
       navigate(`/catalogues/${id}`);
     }
   };
 
+  // C) delete catalogue
   const handleDelete = async (id) => {
     if (catalogue.books.length !== 0) {
       setFormError(
-        "Nie możesz usunąć katalogu, który nie jest pusty. Przenieś najpierw swoje książki do innego katalogu."
+        "Nie możesz usunąć katalogu, który nie jest pusty. Najpierw usuń książki lub przenieś je do innego katalogu."
       );
       return;
     }
@@ -128,7 +192,7 @@ export default function EditCatalogue() {
     }
   };
 
-  // display data fetching status
+  // Data fetching status
   if (catalogueError) {
     return <div className="error">{catalogueError}</div>;
   }
