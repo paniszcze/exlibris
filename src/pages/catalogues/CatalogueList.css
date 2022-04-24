@@ -12,11 +12,24 @@
 }
 
 .catalogue-list li a {
-  display: block;
   margin-top: 10px;
   padding: 16px;
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.05);
   background-color: #fff;
   border-radius: 6px;
   text-decoration: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.catalogue-list img {
+  width: 20px;
+  background: transparent;
+  filter: invert(50%);
+}
+
+.catalogue-list li a:hover img {
+  filter: invert(30%);
 }

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import "./CatalogueList.css";
+import UntrackedIcon from "../../assets/untracked_icon.svg";
 
 export default function CatalogueList({ catalogues }) {
   const [activeCatalogues, setActiveCatalogues] = useState([]);
@@ -30,7 +31,12 @@ export default function CatalogueList({ catalogues }) {
         <ul>
           {activeCatalogues.map((catalogue) => (
             <li key={catalogue.id}>
-              <Link to={`/catalogues/${catalogue.id}`}>{catalogue.title}</Link>
+              <Link to={`/catalogues/${catalogue.id}`}>
+                {catalogue.title}
+                {catalogue.isIndexed && (
+                  <img src={UntrackedIcon} alt="untracked icon" />
+                )}
+              </Link>
             </li>
           ))}
         </ul>
