@@ -33,7 +33,7 @@ export default function CatalogueList({ catalogues }) {
             <li key={catalogue.id}>
               <Link to={`/catalogues/${catalogue.id}`}>
                 {catalogue.title}
-                {catalogue.isIndexed && (
+                {!catalogue.isIndexed && (
                   <img src={UntrackedIcon} alt="untracked icon" />
                 )}
               </Link>
