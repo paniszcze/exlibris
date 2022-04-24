@@ -4,6 +4,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useDocument } from "../../hooks/useDocument";
 
 import "./Home.css";
+import UntrackedIcon from "../../assets/untracked_icon.svg";
 
 import { decline } from "../../utils/inflection";
 
@@ -46,6 +47,9 @@ export default function Home() {
               <li key={catalogue.id}>
                 <Link to={`/catalogues/${catalogue.id}`}>
                   {catalogue.title}
+                  {!catalogue.isIndexed && (
+                  <img src={UntrackedIcon} alt="untracked icon" />
+                )}
                 </Link>
               </li>
             ))}
