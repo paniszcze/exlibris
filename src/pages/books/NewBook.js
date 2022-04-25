@@ -22,15 +22,22 @@ import { createDescription } from "../../utils/description";
 import "./NewBook.css";
 
 export default function NewBook() {
+  // Context and router hooks
   const navigate = useNavigate();
   const { user } = useAuthContext();
 
-  const { document: userData } = useDocument("users", user.uid);
-  const { document: authorList } = useDocument("authors", user.uid);
+  // Firestore hooks
+  // a) books -> add a new book document
   const { addDocument: addBook } = useFirestore("books");
-  const { updateDocument: updateCatalogue } = useFirestore("catalogues");
+  // b) user data -> read catalogue list, update book count
+  const { document: userData } = useDocument("users", user.uid);
   const { updateDocument: updateUser } = useFirestore("users");
-  const { updateDocument: updateAuthors } = useFirestore("authors");
+  // c) author list -> read existing authors/update authors list
+  const { document: authorList } = useDocument("authors", user.uid);
+  const { setDocument } = useFirestore("authors");
+  // d) catalogues -> update destination catalogue
+  const { updateDocument: updateCatalogue } = useFirestore("catalogues");
+  // e) user's data -> update book index
   const { updateDocument: updateIndex } = useFirestore("index");
 
   const [activeCatalogues, setActiveCatalogues] = useState([]);
@@ -70,8 +77,8 @@ export default function NewBook() {
   useEffect(() => {
     if (authorList) {
       setExistingAuthors(
-        Object.keys(authorList.authors).reduce((prev, curr) => {
-          if (authorList.authors[curr] > 0) {
+        Object.keys(authorList).reduce((prev, curr) => {
+          if (authorList[curr] > 0) {
             prev.push(createOption(curr));
           }
           return prev;
@@ -160,11 +167,10 @@ export default function NewBook() {
             translators
           );
           if (creators.length > 0) {
-            await updateAuthors(
+            await setDocument(
               user.uid,
-              Object.fromEntries(
-                creators.map((name) => [`authors.${name}`, increment(1)])
-              )
+              Object.fromEntries(creators.map((name) => [name, increment(1)])),
+              { merge: true }
             );
           }
           // 3) update book index

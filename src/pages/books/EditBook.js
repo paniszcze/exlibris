@@ -49,7 +49,7 @@ export default function EditBook() {
   const { updateDocument: updateCatalogue } = useFirestore("catalogues");
   // d) author list -> read/update
   const { document: authorList } = useDocument("authors", user.uid);
-  const { updateDocument: updateAuthors } = useFirestore("authors");
+  const { setDocument } = useFirestore("authors");
   // e) user's book index -> update
   const { updateDocument: updateIndex } = useFirestore("index");
 
@@ -76,8 +76,8 @@ export default function EditBook() {
   useEffect(() => {
     if (authorList) {
       setExistingAuthors(
-        Object.keys(authorList.authors).reduce((prev, curr) => {
-          if (authorList.authors[curr] > 0) {
+        Object.keys(authorList).reduce((prev, curr) => {
+          if (authorList[curr] > 0) {
             prev.push(createOption(curr));
           }
           return prev;
@@ -192,7 +192,7 @@ export default function EditBook() {
       //   prev:     curr:
       //  FALSE  ->  FALSE   (SKIP)     do nothing (no data was nor is indexed)
       //  FALSE  ->  TRUE    (ADD)      add all details (as if it were a new book)
-      //   TRUE  ->  FALSE   (DELETE)   delete indexed data
+      //   TRUE  ->  FALSE   (DELETE)   delete indexed (old) data
       //   TRUE  ->  TRUE    (UPDATE)   update details
       let isPrevIndexed = book.catalogue.isIndexed;
       let isCurrIndexed = userData.catalogues.find(
@@ -207,28 +207,35 @@ export default function EditBook() {
           updatedEntryDetails
         );
         if (creators.haveChanged) {
-          await updateAuthors(
+          await setDocument(
             user.uid,
             Object.fromEntries(
               creators.changes.map((change) => [
-                `authors.${change[0]}`,
+                change[0],
                 increment(change[1]),
               ])
-            )
+            ),
+            { merge: true }
           );
         }
       } else if (isPrevIndexed || isCurrIndexed) {
-        // DELETE/ADD (execution depends on the argument of increment method)
-        const creators = getUniqueFromMultiInput(authors, editors, translators);
+        // DELETE/ADD
+        const creators = isPrevIndexed
+          ? [
+              ...new Set([
+                ...book.entryDetails.authors,
+                ...book.entryDetails.translators,
+                ...book.entryDetails.editors,
+              ]),
+            ]
+          : getUniqueFromMultiInput(authors, editors, translators);
         if (creators.length > 0) {
-          await updateAuthors(
+          await setDocument(
             user.uid,
             Object.fromEntries(
-              creators.map((name) => [
-                `authors.${name}`,
-                increment(isPrevIndexed ? -1 : 1),
-              ])
-            )
+              creators.map((name) => [name, increment(isPrevIndexed ? -1 : 1)])
+            ),
+            { merge: true }
           );
         }
       }
@@ -364,11 +371,10 @@ export default function EditBook() {
       // 3) update user's authors list
       const creators = getUniqueFromMultiInput(authors, editors, translators);
       if (creators.length > 0) {
-        await updateAuthors(
+        await setDocument(
           user.uid,
-          Object.fromEntries(
-            creators.map((name) => [`authors.${name}`, increment(-1)])
-          )
+          Object.fromEntries(creators.map((name) => [name, increment(-1)])),
+          { merge: true }
         );
       }
     }

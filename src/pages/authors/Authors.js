@@ -16,8 +16,8 @@ export default function Authors() {
   useEffect(() => {
     if (authorList) {
       setAuthors(
-        Object.keys(authorList.authors).reduce((prev, curr) => {
-          if (authorList.authors[curr] > 0) {
+        Object.keys(authorList).reduce((prev, curr) => {
+          if (authorList[curr] > 0) {
             const name = unshiftLastName(curr);
             prev.push(name);
           }
@@ -44,10 +44,7 @@ export default function Authors() {
           <ul>
             {authors.length > 0 ? (
               authors
-                .filter((name) => {
-                  let reg = new RegExp(input.trim(), "gi");
-                  return reg.test(name);
-                })
+                .filter((name) => new RegExp(input.trim(), "gi").test(name))
                 .sort(new Intl.Collator("pl").compare)
                 .map((name, index) => (
                   <li key={index}>
