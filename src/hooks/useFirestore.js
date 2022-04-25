@@ -6,6 +6,7 @@ import {
   doc,
   addDoc,
   deleteDoc,
+  setDoc,
   updateDoc,
 } from "firebase/firestore";
 
@@ -107,10 +108,27 @@ export const useFirestore = (c) => {
     }
   };
 
+  // set a document
+  const setDocument = async (id, updates, merge = { merge: false }) => {
+    dispatch({ type: "IS_PENDING" });
+
+    try {
+      const updatedDocument = await setDoc(doc(db, c, id), updates, merge);
+      dispatchIfNotCancelled({
+        type: "UPDATED_DOCUMENT",
+        payload: updatedDocument,
+      });
+      return updatedDocument;
+    } catch (error) {
+      dispatchIfNotCancelled({ type: "ERROR", payload: error });
+      return null;
+    }
+  };
+
   useEffect(() => {
     setIsCancelled(false);
     return () => setIsCancelled(true);
   }, []);
 
-  return { addDocument, deleteDocument, updateDocument, response };
+  return { addDocument, deleteDocument, updateDocument, setDocument, response };
 };
