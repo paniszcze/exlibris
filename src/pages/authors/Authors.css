@@ -29,7 +29,3 @@
 .authors input::placeholder {
   font-style: italic;
 }
-
-.authors .info {
-  margin-top: 20px;
-}

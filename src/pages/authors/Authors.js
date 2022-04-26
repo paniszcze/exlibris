@@ -32,33 +32,37 @@ export default function Authors() {
     <div className="authors">
       <h2 className="page-title">Indeks nazwisk</h2>
       <div className="authors-list">
-        <input
-          type="text"
-          onChange={(e) => setInput(e.target.value)}
-          value={input}
-          placeholder="Zacznij pisać, żeby przefiltrować wyniki"
-        />
         {!authorList ? (
           <p className="info">Wczytywanie...</p>
         ) : (
-          <ul>
-            {authors.length > 0 ? (
-              authors
-                .filter((name) => new RegExp(input.trim(), "gi").test(name))
-                .sort(new Intl.Collator("pl").compare)
-                .map((name, index) => (
-                  <li key={index}>
-                    <Link
-                      to={`/search?author=${shiftLastName(name).toLowerCase()}`}
-                    >
-                      {name}
-                    </Link>
-                  </li>
-                ))
-            ) : (
-              <p className="info">Brak autorów do wyświetlenia</p>
-            )}
-          </ul>
+          <>
+            <input
+              type="text"
+              onChange={(e) => setInput(e.target.value)}
+              value={input}
+              placeholder="Zacznij pisać, żeby przefiltrować wyniki"
+            />
+            <ul>
+              {authors.length > 0 ? (
+                authors
+                  .filter((name) => new RegExp(input.trim(), "gi").test(name))
+                  .sort(new Intl.Collator("pl").compare)
+                  .map((name, index) => (
+                    <li key={index}>
+                      <Link
+                        to={`/search?author=${shiftLastName(
+                          name
+                        ).toLowerCase()}`}
+                      >
+                        {name}
+                      </Link>
+                    </li>
+                  ))
+              ) : (
+                <p className="info">Brak autorów do wyświetlenia</p>
+              )}
+            </ul>
+          </>
         )}
       </div>
     </div>
