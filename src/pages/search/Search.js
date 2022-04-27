@@ -37,39 +37,43 @@ export default function Search() {
     }
     setQuery(q ? q : "");
   }, [filter, loc]);
-  // filteres results
+  // filtered results
   const [results, setResults] = useState(null);
   useEffect(() => {
     if (indexList && query) {
       setResults(
-        Object.values(indexList.books).filter((book) => {
-          const regex = cleanRegex(query);
-          switch (filter) {
-            case "title":
-              return regex.test(book.title + book.subtitle);
-            case "publisher":
-              return regex.test(book.publisher);
-            case "tag":
-              return book.tags.some((tag) => regex.test(tag));
-            case "series":
-              return book.series.some((s) => regex.test(s));
-            case "author":
-              return [
-                ...book.authors,
-                ...book.translators,
-                ...book.editors,
-              ].some((s) => regex.test(s));
-            case "all":
-            default:
-              return (
-                regex.test(book.description) ||
-                book.tags.some((tag) => regex.test(tag)) ||
-                [...book.authors, ...book.translators, ...book.editors].some(
-                  (s) => regex.test(s)
-                )
-              );
-          }
-        })
+        Object.values(indexList.books)
+          .filter((book) => {
+            const regex = cleanRegex(query);
+            switch (filter) {
+              case "title":
+                return regex.test(book.title + book.subtitle);
+              case "publisher":
+                return regex.test(book.publisher);
+              case "tag":
+                return book.tags.some((tag) => regex.test(tag));
+              case "series":
+                return book.series.some((s) => regex.test(s));
+              case "author":
+                return [
+                  ...book.authors,
+                  ...book.translators,
+                  ...book.editors,
+                ].some((s) => regex.test(s));
+              case "all":
+              default:
+                return (
+                  regex.test(book.description) ||
+                  book.tags.some((tag) => regex.test(tag)) ||
+                  [...book.authors, ...book.translators, ...book.editors].some(
+                    (s) => regex.test(s)
+                  )
+                );
+            }
+          })
+          .sort((a, b) =>
+            new Intl.Collator("pl").compare(a.description, b.description)
+          )
       );
     }
   }, [indexList, filter, query]);
