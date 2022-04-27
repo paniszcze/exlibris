@@ -91,6 +91,16 @@ export default function App() {
                 path="signup"
                 element={user ? <Navigate to="/" /> : <Signup />}
               />
+              <Route
+                path="*"
+                element={
+                  user ? (
+                    <p className="error">Podana strona nie istnieje...</p>
+                  ) : (
+                    <Login />
+                  )
+                }
+              />
             </Routes>
           </div>
         </BrowserRouter>
