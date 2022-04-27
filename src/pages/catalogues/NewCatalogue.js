@@ -7,6 +7,7 @@ import { arrayUnion } from "firebase/firestore";
 
 import "./NewCatalogue.css";
 
+import LoadingSpinner from "../../components/LoadingSpinner";
 import Select from "react-select";
 import {
   sortingOptions,
@@ -103,7 +104,7 @@ export default function NewCatalogue() {
 
   // Data fetching status
   if (!userData) {
-    return <div className="loading">Wczytywanie...</div>;
+    return <LoadingSpinner />;
   }
 
   return (

@@ -5,6 +5,7 @@ import "./Book.css";
 
 import BookDetails from "./BookDetails";
 import BookNotes from "./BookNotes";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 export default function Book() {
   const { id } = useParams();
@@ -14,7 +15,7 @@ export default function Book() {
     return <div className="error">{error}</div>;
   }
   if (!book) {
-    return <div className="loading">Wczytywanie...</div>;
+    return <LoadingSpinner />;
   }
 
   return (

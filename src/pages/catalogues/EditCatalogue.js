@@ -7,6 +7,7 @@ import { useFirestore } from "../../hooks/useFirestore";
 import "./NewCatalogue.css";
 import "./EditCatalogue.css";
 
+import LoadingSpinner from "../../components/LoadingSpinner";
 import Select from "react-select";
 import { sortingOptions, customStyles, customTheme } from "../../utils/select";
 
@@ -197,7 +198,7 @@ export default function EditCatalogue() {
     return <div className="error">{catalogueError}</div>;
   }
   if (!catalogue || !userData) {
-    return <div className="loading">Wczytywanie...</div>;
+    return <LoadingSpinner />;
   }
 
   return (

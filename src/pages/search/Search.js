@@ -7,6 +7,7 @@ import "./Search.css";
 
 import SearchResult from "./SearchResult";
 import Filter from "../../components/Filter";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 import { searchFilters, cleanRegex } from "../../utils/search";
 
@@ -130,7 +131,7 @@ export default function Search() {
               </h3>
             )
           ) : (
-            <p className="info">Wczytuję...</p>
+            <LoadingSpinner />
           )}
         </div>
       )}

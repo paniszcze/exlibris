@@ -16,6 +16,7 @@ import {
   listSelectedValues,
   getUniqueFromMultiInput,
 } from "../../utils/select";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 import { createDescription } from "../../utils/description";
 
@@ -220,7 +221,7 @@ export default function NewBook() {
 
   // Display data fetching status
   if (!userData || !authorList) {
-    return <div className="loading">Wczytywanie...</div>;
+    return <LoadingSpinner />;
   }
 
   return (

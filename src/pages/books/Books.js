@@ -5,6 +5,7 @@ import { useDocument } from "../../hooks/useDocument";
 import "./Books.css";
 
 import BookList from "./BookList";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 export default function Books() {
   const { user } = useAuthContext();
@@ -27,7 +28,7 @@ export default function Books() {
           />
         )
       ) : (
-        <p className="info">Wczytuję...</p>
+        <LoadingSpinner />
       )}
       <Link to="new" className="btn">
         Dodaj nową książkę

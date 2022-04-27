@@ -3,6 +3,8 @@ import { useDocument } from "../../hooks/useDocument";
 
 import "./Catalogue.css";
 
+import LoadingSpinner from "../../components/LoadingSpinner";
+
 export default function Catalogue() {
   const { id } = useParams();
   const { document: catalogue, error } = useDocument("catalogues", id);
@@ -11,7 +13,7 @@ export default function Catalogue() {
     return <div className="error">{error}</div>;
   }
   if (!catalogue) {
-    return <div className="loading">Wczytywanie...</div>;
+    return <LoadingSpinner />;
   }
 
   return (

@@ -24,6 +24,7 @@ import {
   listSelectedValues,
   getUniqueFromMultiInput,
 } from "../../utils/select";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 import { createDescription } from "../../utils/description";
 import { hasBookChanged, haveCreatorsChanged } from "../../utils/bookData";
@@ -393,7 +394,7 @@ export default function EditBook() {
     return <div className="error">{bookError}</div>;
   }
   if (!book || !userData) {
-    return <div className="loading">Wczytywanie...</div>;
+    return <LoadingSpinner />;
   }
 
   return (

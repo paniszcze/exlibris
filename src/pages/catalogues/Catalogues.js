@@ -4,6 +4,7 @@ import { useDocument } from "../../hooks/useDocument";
 import "./Catalogues.css";
 
 import CatalogueList from "./CatalogueList";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 export default function Catalogues() {
   const { user } = useAuthContext();
@@ -12,14 +13,15 @@ export default function Catalogues() {
   if (error) {
     return <div className="error">{error}</div>;
   }
-  if (!userData) {
-    return <div className="loading">Wczytywanie...</div>;
-  }
 
   return (
     <div className="catalogues">
       <h2 className="page-title">Moje katalogi</h2>
-      {userData && <CatalogueList catalogues={userData.catalogues} />}
+      {userData ? (
+        <CatalogueList catalogues={userData.catalogues} />
+      ) : (
+        <LoadingSpinner />
+      )}
     </div>
   );
 }

@@ -5,6 +5,8 @@ import { useDocument } from "../../hooks/useDocument";
 
 import "./Authors.css";
 
+import LoadingSpinner from "../../components/LoadingSpinner";
+
 import { shiftLastName, unshiftLastName } from "../../utils/description";
 
 export default function Authors() {
@@ -33,7 +35,7 @@ export default function Authors() {
       <h2 className="page-title">Indeks nazwisk</h2>
       <div className="authors-list">
         {!authorList ? (
-          <p className="info">Wczytywanie...</p>
+          <LoadingSpinner />
         ) : (
           <>
             <input

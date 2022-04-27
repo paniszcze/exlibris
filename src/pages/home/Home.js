@@ -6,6 +6,8 @@ import { useDocument } from "../../hooks/useDocument";
 import "./Home.css";
 import UntrackedIcon from "../../assets/untracked_icon.svg";
 
+import LoadingSpinner from "../../components/LoadingSpinner";
+
 import { decline } from "../../utils/inflection";
 
 export default function Home() {
@@ -26,35 +28,38 @@ export default function Home() {
   if (error) {
     return <div className="error">{error}</div>;
   }
-  if (!userData) {
-    return <div className="loading">Wczytywanie...</div>;
-  }
 
   return (
     <div className="home">
-      <h2 className="page-title">Witaj, {user.displayName}</h2>
-      <p>
-        Masz <strong>{userData.bookCount}</strong>{" "}
-        {decline("książka", userData.bookCount)} w{" "}
-        <strong>{userData.catalogues.length}</strong>{" "}
-        {decline("katalog", userData.catalogues.length)}
-      </p>
-      {activeCatalogues.length > 0 && (
-        <div className="activity">
-          <h3>Twoje bieżące katalogi</h3>
-          <ul>
-            {activeCatalogues.map((catalogue) => (
-              <li key={catalogue.id}>
-                <Link to={`/catalogues/${catalogue.id}`}>
-                  {catalogue.title}
-                  {!catalogue.isIndexed && (
-                  <img src={UntrackedIcon} alt="untracked icon" />
-                )}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+      {userData ? (
+        <>
+          <h2 className="page-title">Witaj, {user.displayName}</h2>
+          <p>
+            Masz <strong>{userData.bookCount}</strong>{" "}
+            {decline("książka", userData.bookCount)} w{" "}
+            <strong>{userData.catalogues.length}</strong>{" "}
+            {decline("katalog", userData.catalogues.length)}
+          </p>
+          {activeCatalogues.length > 0 && (
+            <div className="activity">
+              <h3>Twoje bieżące katalogi</h3>
+              <ul>
+                {activeCatalogues.map((catalogue) => (
+                  <li key={catalogue.id}>
+                    <Link to={`/catalogues/${catalogue.id}`}>
+                      {catalogue.title}
+                      {!catalogue.isIndexed && (
+                        <img src={UntrackedIcon} alt="untracked icon" />
+                      )}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </>
+      ) : (
+        <LoadingSpinner />
       )}
     </div>
   );
