@@ -1,10 +1,22 @@
 export const unshiftLastName = (name) => {
   let words = name.split(" ");
+
   if (words.length === 1) {
     return words[0];
   }
 
+  // EXCEPTION'1: <name> from <place>
+  if (words.length === 3 && /^[zà]$/.test(words[1])) {
+    return words.join(" ");
+  }
+
   let lastName = words.pop();
+
+  // EXCEPTION'2: Ursula K. Le Guin
+  if (lastName === "Guin" && /^le$/i.test(words[words.length - 1])) {
+    lastName = `${words.pop()} ${lastName}`;
+  }
+
   const elision = new RegExp(/^(d'|l')/, "i");
   if (elision.test(lastName)) {
     words.push(lastName.substring(0, 2));
@@ -41,9 +53,11 @@ export const createDescription = (entry) => {
     );
   }
   // title, subtitle and volume
-  description.push(entry.title + ".");
+  description.push(entry.title + (/[.?!]$/.test(entry.title) ? "" : "."));
   if (entry.subtitle) {
-    description.push(entry.subtitle + ".");
+    description.push(
+      entry.subtitle + (/[.?!]$/.test(entry.subtitle) ? "" : ".")
+    );
   }
   if (entry.volume) {
     description.push("T. " + entry.volume + ".");
