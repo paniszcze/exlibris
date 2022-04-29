@@ -83,7 +83,7 @@ export default function Search() {
   // Button handler
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate(`/search?${filter ? filter : "all"}=${input}`);
+    navigate(`/search?${filter ? filter : "all"}=${input.trim()}`);
   };
 
   return (
