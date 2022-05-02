@@ -32,64 +32,64 @@ export default function App() {
             <Navbar />
             <Routes>
               <Route
-                path="/"
-                element={user ? <Home /> : <Navigate to="/login" />}
+                path="exlibris/"
+                element={user ? <Home /> : <Navigate to="/exlibris/login" />}
               />
               <Route
-                path="catalogues"
-                element={user ? <Catalogues /> : <Navigate to="/login" />}
+                path="exlibris/catalogues"
+                element={user ? <Catalogues /> : <Navigate to="/exlibris/login" />}
               />
               <Route
-                path="catalogues/new"
-                element={user ? <NewCatalogue /> : <Navigate to="/login" />}
+                path="exlibris/catalogues/new"
+                element={user ? <NewCatalogue /> : <Navigate to="/exlibris/login" />}
               />
               <Route
-                path="catalogues/:id"
-                element={user ? <Catalogue /> : <Navigate to="/login" />}
+                path="exlibris/catalogues/:id"
+                element={user ? <Catalogue /> : <Navigate to="/exlibris/login" />}
               />
               <Route
-                path="catalogues/:id/edit"
-                element={user ? <EditCatalogue /> : <Navigate to="/login" />}
+                path="exlibris/catalogues/:id/edit"
+                element={user ? <EditCatalogue /> : <Navigate to="/exlibris/login" />}
               />
               <Route
-                path="books"
-                element={user ? <Books /> : <Navigate to="/login" />}
+                path="exlibris/books"
+                element={user ? <Books /> : <Navigate to="/exlibris/login" />}
               />
               <Route
-                path="books/new"
-                element={user ? <NewBook /> : <Navigate to="/login" />}
+                path="exlibris/books/new"
+                element={user ? <NewBook /> : <Navigate to="/exlibris/login" />}
               />
               <Route
-                path="books/:id"
-                element={user ? <Book /> : <Navigate to="/login" />}
+                path="exlibris/books/:id"
+                element={user ? <Book /> : <Navigate to="/exlibris/login" />}
               />
               <Route
-                path="books/:id/edit"
-                element={user ? <EditBook /> : <Navigate to="/login" />}
+                path="exlibris/books/:id/edit"
+                element={user ? <EditBook /> : <Navigate to="/exlibris/login" />}
               />
               <Route
-                path="authors"
-                element={user ? <Authors /> : <Navigate to="/login" />}
+                path="exlibris/authors"
+                element={user ? <Authors /> : <Navigate to="/exlibris/login" />}
               />
               <Route
-                path="catalogues"
-                element={user ? <Catalogues /> : <Navigate to="/login" />}
+                path="exlibris/catalogues"
+                element={user ? <Catalogues /> : <Navigate to="/exlibris/login" />}
               />
               <Route
-                path="catalogues/:id"
+                path="exlibris/catalogues/:id"
                 element={user ? <Catalogue /> : <Login />}
               />
               <Route
-                path="search"
-                element={user ? <Search /> : <Navigate to="/login" />}
+                path="exlibris/search"
+                element={user ? <Search /> : <Navigate to="/exlibris/login" />}
               />
               <Route
-                path="login"
-                element={user ? <Navigate to="/" /> : <Login />}
+                path="exlibris/login"
+                element={user ? <Navigate to="/exlibris/" /> : <Login />}
               />
               <Route
-                path="signup"
-                element={user ? <Navigate to="/" /> : <Signup />}
+                path="exlibris/signup"
+                element={user ? <Navigate to="/exlibris/" /> : <Signup />}
               />
               <Route
                 path="*"

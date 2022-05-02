@@ -31,7 +31,7 @@ export default function CatalogueList({ catalogues }) {
         <ul>
           {activeCatalogues.map((catalogue) => (
             <li key={catalogue.id}>
-              <Link to={`/catalogues/${catalogue.id}`}>
+              <Link to={`/exlibris/catalogues/${catalogue.id}`}>
                 {catalogue.title}
                 {!catalogue.isIndexed && (
                   <img src={UntrackedIcon} alt="untracked icon" />
@@ -51,7 +51,7 @@ export default function CatalogueList({ catalogues }) {
         <ul>
           {archivedCatalogues.map((catalogue) => (
             <li key={catalogue.id}>
-              <Link to={`/catalogues/${catalogue.id}`}>{catalogue.title}</Link>
+              <Link to={`/exlibris/catalogues/${catalogue.id}`}>{catalogue.title}</Link>
             </li>
           ))}
         </ul>

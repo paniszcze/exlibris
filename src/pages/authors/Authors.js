@@ -52,7 +52,7 @@ export default function Authors() {
                   .map((name, index) => (
                     <li key={index}>
                       <Link
-                        to={`/search?author=${shiftLastName(
+                        to={`/exlibris/search?author=${shiftLastName(
                           name
                         ).toLowerCase()}`}
                       >

@@ -22,31 +22,31 @@ export default function Sidebar() {
         <nav className="links">
           <ul>
             <li>
-              <NavLink to="catalogues">
+              <NavLink to="exlibris/catalogues">
                 <img src={ListIcon} alt="list icon" />
                 <span>Katalogi</span>
               </NavLink>
             </li>
             <li>
-              <NavLink to="books">
+              <NavLink to="exlibris/books">
                 <img src={BookIcon} alt="book icon" />
                 <span>Książki</span>
               </NavLink>
             </li>
             <li>
-              <NavLink to="authors">
+              <NavLink to="exlibris/authors">
                 <img src={AuthorIcon} alt="author icon" />
                 <span>Autorzy</span>
               </NavLink>
             </li>
             <li>
-              <NavLink to="search">
+              <NavLink to="exlibris/search">
                 <img src={SearchIcon} alt="search icon" />
                 <span>Szukaj</span>
               </NavLink>
             </li>
             <li>
-              <Link to="books/new">
+              <Link to="exlibris/books/new">
                 <img src={AddIcon} alt="add icon" />
                 <span>Dodaj książkę</span>
               </Link>

@@ -36,40 +36,46 @@ function DynamicTitle({ id, collection }) {
 
 export const routes = [
   {
-    path: "/",
+    path: "/exlibris",
     breadcrumb: "Strona główna",
     children: [
       {
-        path: "/catalogues",
+        path: "/exlibris/catalogues",
         breadcrumb: "Katalogi",
         children: [
-          { path: "/catalogues/new", breadcrumb: "Dodaj katalog" },
+          { path: "/exlibris/catalogues/new", breadcrumb: "Dodaj katalog" },
           {
-            path: "/catalogues/:id",
+            path: "/exlibris/catalogues/:id",
             breadcrumb: null,
             children: [
-              { path: "/catalogues/:id/edit", breadcrumb: "Edytuj katalog" },
+              {
+                path: "/exlibris/catalogues/:id/edit",
+                breadcrumb: "Edytuj katalog",
+              },
             ],
           },
         ],
       },
       {
-        path: "/books",
+        path: "/exlibris/books",
         breadcrumb: "Książki",
         children: [
-          { path: "/books/new", breadcrumb: "Dodaj pozcyję" },
+          { path: "/exlibris/books/new", breadcrumb: "Dodaj pozcyję" },
           {
-            path: "/books/:id",
+            path: "/exlibris/books/:id",
             breadcrumb: null,
             children: [
-              { path: "/books/:id/edit", breadcrumb: "Edytuj pozycję" },
+              {
+                path: "/exlibris/books/:id/edit",
+                breadcrumb: "Edytuj pozycję",
+              },
             ],
           },
         ],
       },
-      { path: "/authors", breadcrumb: "Autorzy" },
-      { path: "/search", breadcrumb: "Szukaj" },
-      { path: "/*", breadcrumb: "Nie znaleziono" },
+      { path: "/exlibris/authors", breadcrumb: "Autorzy" },
+      { path: "/exlibris/search", breadcrumb: "Szukaj" },
+      { path: "/exlibris/*", breadcrumb: "Nie znaleziono" },
     ],
   },
 ];
@@ -81,9 +87,10 @@ export default function Breadcrumbs() {
   useEffect(() => {
     const currCrumbs = [];
     const paths = loc.pathname.split("/").filter(Boolean);
+    paths.shift();
     const len = paths.unshift("/");
 
-    let currPath = "";
+    let currPath = "/exlibris";
     let count = 0;
 
     const buildCrumbs = (routes) => {

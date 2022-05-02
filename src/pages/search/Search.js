@@ -16,7 +16,7 @@ export default function Search() {
   const { user } = useAuthContext();
   const navigate = useNavigate();
   const loc = useLocation();
-
+  console.log(loc.search);
   // Firestore hooks
   const { document: indexList } = useDocument("index", user.uid);
 
@@ -83,7 +83,7 @@ export default function Search() {
   // Button handler
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate(`/search?${filter ? filter : "all"}=${input.trim()}`);
+    navigate(`/exlibris/search?${filter ? filter : "all"}=${input.trim()}`);
   };
 
   return (

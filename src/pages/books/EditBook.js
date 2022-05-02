@@ -297,7 +297,7 @@ export default function EditBook() {
     }
 
     if (!bookResponse.error) {
-      navigate(`/books/${id}`);
+      navigate(`/exlibris/books/${id}`);
     }
   };
 
@@ -332,7 +332,7 @@ export default function EditBook() {
     );
 
     if (!bookResponse.error) {
-      navigate(`/books/${id}`);
+      navigate(`/exlibris/books/${id}`);
     }
   };
 
@@ -385,7 +385,7 @@ export default function EditBook() {
 
     // Navigate to books subpage
     if (!bookResponse.error) {
-      navigate("/books");
+      navigate("/exlibris/books");
     }
   };
 

@@ -73,7 +73,7 @@ export default function BookList({ books }) {
         {sortedBooks &&
           filter &&
           sortedBooks.get(filter).map((book) => (
-            <Link to={`/books/${book.id}`} key={book.id}>
+            <Link to={`/exlibris/books/${book.id}`} key={book.id}>
               <h4 className={book.isDisposed ? "disposed" : ""}>{book.title}</h4>
               <div className="tile-details">
                 {book.authors.length > 0 && (

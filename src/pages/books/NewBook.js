@@ -201,7 +201,7 @@ export default function NewBook() {
         }
 
         // C) navigate to new book's detail page
-        navigate(`/books/${docRef.id}`);
+        navigate(`/exlibris/books/${docRef.id}`);
       }
     } catch (error) {
       console.log(error.message);
@@ -214,7 +214,7 @@ export default function NewBook() {
       <p className="error">
         Obecnie nie masz żadnego aktywnego katalogu, do którego mógłbyś
         przypisać nową pozycję. Stwórz najpierw{" "}
-        <Link to="/catalogues/new">nowy katalog</Link>.
+        <Link to="/exlibris/catalogues/new">nowy katalog</Link>.
       </p>
     );
   }

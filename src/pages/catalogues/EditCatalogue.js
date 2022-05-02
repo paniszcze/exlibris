@@ -119,7 +119,7 @@ export default function EditCatalogue() {
     });
 
     if (!response.error) {
-      navigate(`/catalogues/${id}`);
+      navigate(`/exlibris/catalogues/${id}`);
     }
   };
 
@@ -165,13 +165,10 @@ export default function EditCatalogue() {
             : `${catalogue.title.slice(0, 5)}/${startingIndex + index}`,
         });
       });
-      // ///////////
-      // book:    catalogue.record         = update per book document
-      // index:   books.${bookId}.record   = one update with as many fields as there are books
     }
 
     if (!response.error) {
-      navigate(`/catalogues/${id}`);
+      navigate(`/exlibris/catalogues/${id}`);
     }
   };
 
@@ -189,7 +186,7 @@ export default function EditCatalogue() {
       catalogues: catalogues.filter((item) => item.id !== id),
     });
     if (!response.error) {
-      navigate("/catalogues");
+      navigate("/exlibris/catalogues");
     }
   };
 
