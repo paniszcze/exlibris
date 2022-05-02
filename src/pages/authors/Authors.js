@@ -44,9 +44,9 @@ export default function Authors() {
               value={input}
               placeholder="Zacznij pisać, żeby przefiltrować wyniki"
             />
-            <ul>
-              {authors.length > 0 ? (
-                authors
+            {authors.length > 0 ? (
+              <ul>
+                {authors
                   .filter((name) => new RegExp(input.trim(), "gi").test(name))
                   .sort(new Intl.Collator("pl").compare)
                   .map((name, index) => (
@@ -59,11 +59,11 @@ export default function Authors() {
                         {name}
                       </Link>
                     </li>
-                  ))
-              ) : (
-                <p className="info">Brak autorów do wyświetlenia</p>
-              )}
-            </ul>
+                  ))}
+              </ul>
+            ) : (
+              <p className="info">Brak autorów do wyświetlenia</p>
+            )}
           </>
         )}
       </div>
