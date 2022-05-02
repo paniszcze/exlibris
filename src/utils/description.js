@@ -5,8 +5,12 @@ export const unshiftLastName = (name) => {
     return words[0];
   }
 
-  // EXCEPTION'1: <name> from <place>
-  if (words.length === 3 && /^[zà]$/.test(words[1])) {
+  // EXCEPTION'1: <saint> <name> || <name> from <place>
+  if (/^św\.$/i.test(words[0])) {
+    let st = words.shift();
+    return `${words.join(" ")}, ${st}`;
+  }
+  if (/^[zà]$/.test(words[words.length - 2])) {
     return words.join(" ");
   }
 
@@ -17,7 +21,7 @@ export const unshiftLastName = (name) => {
     lastName = `${words.pop()} ${lastName}`;
   }
 
-  const elision = new RegExp(/^(d'|l')/, "i");
+  const elision = new RegExp(/^([dl]['’])/, "i");
   if (elision.test(lastName)) {
     words.push(lastName.substring(0, 2));
     lastName = lastName.substring(2);
@@ -53,10 +57,10 @@ export const createDescription = (entry) => {
     );
   }
   // title, subtitle and volume
-  description.push(entry.title + (/[.?!]$/.test(entry.title) ? "" : "."));
+  description.push(entry.title + (/[.?!…]$/.test(entry.title) ? "" : "."));
   if (entry.subtitle) {
     description.push(
-      entry.subtitle + (/[.?!]$/.test(entry.subtitle) ? "" : ".")
+      entry.subtitle + (/[.?!…]$/.test(entry.subtitle) ? "" : ".")
     );
   }
   if (entry.volume) {
