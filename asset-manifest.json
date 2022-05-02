@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/exlibris/static/css/main.8186da79.css",
-    "main.js": "/exlibris/static/js/main.434ec251.js",
+    "main.js": "/exlibris/static/js/main.8992f8b2.js",
     "static/media/book_icon.svg": "/exlibris/static/media/book_icon.5ad7bc12e7dc2754f81a5a76069be5c2.svg",
     "static/media/logo.svg": "/exlibris/static/media/logo.9d49b91c6c82cdd7369c5455712a62af.svg",
     "static/media/untracked_icon.svg": "/exlibris/static/media/untracked_icon.f775549bbe880e134ef49e06487d4ead.svg",
@@ -14,10 +14,10 @@
     "static/media/add_icon.svg": "/exlibris/static/media/add_icon.9caab88833f9c71d2b78133ca2c10171.svg",
     "static/media/author_icon.svg": "/exlibris/static/media/author_icon.023e4181f490f1ce2b3335d6aaf7892b.svg",
     "main.8186da79.css.map": "/exlibris/static/css/main.8186da79.css.map",
-    "main.434ec251.js.map": "/exlibris/static/js/main.434ec251.js.map"
+    "main.8992f8b2.js.map": "/exlibris/static/js/main.8992f8b2.js.map"
   },
   "entrypoints": [
     "static/css/main.8186da79.css",
-    "static/js/main.434ec251.js"
+    "static/js/main.8992f8b2.js"
   ]
 }
