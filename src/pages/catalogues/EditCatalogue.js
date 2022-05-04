@@ -119,7 +119,7 @@ export default function EditCatalogue() {
     });
 
     if (!response.error) {
-      navigate(`/exlibris/catalogues/${id}`);
+      navigate(`/catalogues/${id}`);
     }
   };
 
@@ -168,7 +168,7 @@ export default function EditCatalogue() {
     }
 
     if (!response.error) {
-      navigate(`/exlibris/catalogues/${id}`);
+      navigate(`/catalogues/${id}`);
     }
   };
 
@@ -186,7 +186,7 @@ export default function EditCatalogue() {
       catalogues: catalogues.filter((item) => item.id !== id),
     });
     if (!response.error) {
-      navigate("/exlibris/catalogues");
+      navigate("/catalogues");
     }
   };
 

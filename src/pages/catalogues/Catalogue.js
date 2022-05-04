@@ -33,7 +33,7 @@ export default function Catalogue() {
               )
               .map((book) => (
                 <li key={book.id} className={book.isDisposed ? "disposed" : ""}>
-                  <Link to={`/exlibris/books/${book.id}`}>{book.description}</Link>
+                  <Link to={`/books/${book.id}`}>{book.description}</Link>
                 </li>
               ))}
           </ol>

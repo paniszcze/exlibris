@@ -46,7 +46,7 @@ export default function Home() {
               <ul>
                 {activeCatalogues.map((catalogue) => (
                   <li key={catalogue.id}>
-                    <Link to={`/exlibris/catalogues/${catalogue.id}`}>
+                    <Link to={`/catalogues/${catalogue.id}`}>
                       {catalogue.title}
                       {!catalogue.isIndexed && (
                         <img src={UntrackedIcon} alt="untracked icon" />

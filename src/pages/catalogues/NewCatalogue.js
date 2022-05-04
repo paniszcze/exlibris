@@ -95,7 +95,7 @@ export default function NewCatalogue() {
       }
 
       if (!catalogueResponse.error) {
-        navigate("/exlibris/catalogues");
+        navigate("/catalogues");
       }
     } catch (error) {
       console.log(error.message);

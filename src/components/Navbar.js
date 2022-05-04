@@ -22,10 +22,10 @@ export default function Navbar() {
         {!user ? (
           <>
             <li>
-              <Link to="/exlibris/login">Zaloguj</Link>
+              <Link to="/login">Zaloguj</Link>
             </li>
             <li>
-              <Link to="/exlibris/signup">Załóż konto</Link>
+              <Link to="/signup">Załóż konto</Link>
             </li>
           </>
         ) : (

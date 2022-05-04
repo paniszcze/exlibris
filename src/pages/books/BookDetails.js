@@ -22,7 +22,7 @@ export default function BookDetails({ entry, catalogue }) {
             <h4>Autor:</h4>
             <p>
               {entry.authors.map((author, index) => (
-                <Link to={`/exlibris/search?author=${author.toLowerCase()}`} key={index}>
+                <Link to={`/search?author=${author.toLowerCase()}`} key={index}>
                   {author}
                 </Link>
               ))}
@@ -35,7 +35,7 @@ export default function BookDetails({ entry, catalogue }) {
             <p>
               {entry.translators.map((translator, index) => (
                 <Link
-                  to={`/exlibris/search?author=${translator.toLowerCase()}`}
+                  to={`/search?author=${translator.toLowerCase()}`}
                   key={index}
                 >
                   {translator}
@@ -49,7 +49,7 @@ export default function BookDetails({ entry, catalogue }) {
             <h4>Redaktor:</h4>
             <p>
               {entry.editors.map((editor, index) => (
-                <Link to={`/exlibris/search?author=${editor.toLowerCase()}`} key={index}>
+                <Link to={`/search?author=${editor.toLowerCase()}`} key={index}>
                   {editor}
                 </Link>
               ))}
@@ -134,7 +134,7 @@ export default function BookDetails({ entry, catalogue }) {
         <button onClick={() => setShowDescription(true)} className="btn">
           Pokaż opis
         </button>
-        <Link to={`/exlibris/catalogues/${catalogue.id}`} className="btn">
+        <Link to={`/catalogues/${catalogue.id}`} className="btn">
           Zobacz w katalogu
         </Link>
       </div>

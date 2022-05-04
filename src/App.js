@@ -26,70 +26,70 @@ export default function App() {
   return (
     <div className="App">
       {authIsReady && (
-        <BrowserRouter>
+        <BrowserRouter basename="/exlibris">
           {user && <Sidebar />}
           <div className="container">
             <Navbar />
             <Routes>
               <Route
-                path="exlibris/"
-                element={user ? <Home /> : <Navigate to="/exlibris/login" />}
+                path="/"
+                element={user ? <Home /> : <Navigate to="/login" />}
               />
               <Route
-                path="exlibris/catalogues"
-                element={user ? <Catalogues /> : <Navigate to="/exlibris/login" />}
+                path="catalogues"
+                element={user ? <Catalogues /> : <Navigate to="/login" />}
               />
               <Route
-                path="exlibris/catalogues/new"
-                element={user ? <NewCatalogue /> : <Navigate to="/exlibris/login" />}
+                path="catalogues/new"
+                element={user ? <NewCatalogue /> : <Navigate to="/login" />}
               />
               <Route
-                path="exlibris/catalogues/:id"
-                element={user ? <Catalogue /> : <Navigate to="/exlibris/login" />}
+                path="catalogues/:id"
+                element={user ? <Catalogue /> : <Navigate to="/login" />}
               />
               <Route
-                path="exlibris/catalogues/:id/edit"
-                element={user ? <EditCatalogue /> : <Navigate to="/exlibris/login" />}
+                path="catalogues/:id/edit"
+                element={user ? <EditCatalogue /> : <Navigate to="/login" />}
               />
               <Route
-                path="exlibris/books"
-                element={user ? <Books /> : <Navigate to="/exlibris/login" />}
+                path="books"
+                element={user ? <Books /> : <Navigate to="/login" />}
               />
               <Route
-                path="exlibris/books/new"
-                element={user ? <NewBook /> : <Navigate to="/exlibris/login" />}
+                path="books/new"
+                element={user ? <NewBook /> : <Navigate to="/login" />}
               />
               <Route
-                path="exlibris/books/:id"
-                element={user ? <Book /> : <Navigate to="/exlibris/login" />}
+                path="books/:id"
+                element={user ? <Book /> : <Navigate to="/login" />}
               />
               <Route
-                path="exlibris/books/:id/edit"
-                element={user ? <EditBook /> : <Navigate to="/exlibris/login" />}
+                path="books/:id/edit"
+                element={user ? <EditBook /> : <Navigate to="/login" />}
               />
               <Route
-                path="exlibris/authors"
-                element={user ? <Authors /> : <Navigate to="/exlibris/login" />}
+                path="authors"
+                element={user ? <Authors /> : <Navigate to="/login" />}
               />
               <Route
-                path="exlibris/catalogues"
-                element={user ? <Catalogues /> : <Navigate to="/exlibris/login" />}
+                path="catalogues"
+                element={user ? <Catalogues /> : <Navigate to="/login" />}
               />
               <Route
-                path="exlibris/catalogues/:id"
+                path="catalogues/:id"
                 element={user ? <Catalogue /> : <Login />}
               />
               <Route
-                path="exlibris/search"
-                element={user ? <Search /> : <Navigate to="/exlibris/login" />}
+                path="search"
+                element={user ? <Search /> : <Navigate to="/login" />}
               />
               <Route
-                path="exlibris/login"
-                element={user ? <Navigate to="/exlibris/" /> : <Login />}
+                path="login"
+                element={user ? <Navigate to="/" /> : <Login />}
               />
               <Route
-                path="exlibris/signup"
-                element={user ? <Navigate to="/exlibris/" /> : <Signup />}
+                path="signup"
+                element={user ? <Navigate to="/" /> : <Signup />}
               />
               <Route
                 path="*"

@@ -7,7 +7,7 @@ import { highlightMatch } from "../../utils/search";
 
 export default function SearchResult({ query, result }) {
   return (
-    <Link className="result" to={`/exlibris/books/${result.id}`}>
+    <Link className="result" to={`/books/${result.id}`}>
       <div className="result-details">
         <h4>
           {result.title}{" "}
