@@ -1,9 +1,14 @@
 # exLibris
-
-Personal book cataloguing tool built with React and using Firebase as backend.
+*Personal online book cataloguing tool for book lovers who want to keep record of their book collections* 
 
 ![screenshot of exlibris](src/assets/screenshot_books.png)
 
-## About
+## Features
+- Add book information
+- Group books into categories
+- Search by author
+- Search through user's library
 
-exLibris is an online cataloguing tool for book lovers who want to keep record of their book collections. exLibris makes it easy to add information, group books into categories, look up authors and search through user's library.
+### Built with
+- *React*
+- *Firebase* back-end
